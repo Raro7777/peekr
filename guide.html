@@ -325,6 +325,60 @@
             font-size: 0.8em;
             font-weight: 500;
         }
+
+        /* Coffee */
+        .coffee-section {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .coffee-icon {
+            font-size: 4em;
+            margin-bottom: 16px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .coffee-section h2 {
+            font-size: 1.5em;
+            margin-bottom: 12px;
+        }
+
+        .coffee-section p {
+            color: var(--text2);
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+
+        .coffee-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #FFDD00, #FF9100);
+            color: #000;
+            font-size: 1.1em;
+            font-weight: 700;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 145, 0, 0.3);
+        }
+
+        .coffee-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 145, 0, 0.5);
+        }
     </style>
 </head>
 
@@ -576,6 +630,24 @@
                     <div class="icon">🔐</div>
                     <h3>서버 전송 없음</h3>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 후원 -->
+    <div class="section">
+        <div class="container">
+            <div class="coffee-section">
+                <div class="coffee-icon">☕</div>
+                <h2>개발자에게 커피 한 잔 사주기</h2>
+                <p>슬쩍이 유용하셨다면, 커피 한 잔으로 응원해 주세요!<br>
+                    여러분의 후원이 더 나은 업데이트의 원동력이 됩니다 ☕️</p>
+                <a href="https://buymeacoffee.com/raro7777" target="_blank" class="coffee-btn">
+                    ☕ Buy me a coffee
+                </a>
+                <p style="font-size:0.75em;color:var(--text2);margin-top:12px;">
+                    또는 카카오뱅크 3333-00-0000000 으로 후원해 주셔도 감사합니다 🙏
+                </p>
             </div>
         </div>
     </div>
