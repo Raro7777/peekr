@@ -5,18 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>슬쩍(peekr) - 사용 가이드</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            --bg: #0D1B2A;
-            --bg2: #1B2838;
+            --gold: #FF8F00;
+            --red: #D50000;
+            --text1: #111111;
+            --text2: #555555;
+            --border: rgba(255, 255, 255, 0.5);
             --accent: #4CAF50;
-            --accent2: #81C784;
-            --text: #E0E0E0;
-            --text2: #9E9E9E;
-            --card: #1E2D3D;
-            --red: #FF5252;
         }
 
         * {
@@ -25,30 +24,76 @@
             box-sizing: border-box;
         }
 
+        /* ---------------------------------
+           PREMIUM BACKGROUND
+        ---------------------------------- */
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            color: var(--text1);
+            overflow-x: hidden;
+            background-color: #F8F9FA;
+            background-image: url('./assets/premium_bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             line-height: 1.7;
         }
 
-        /* Hero */
-        .hero {
-            background: linear-gradient(135deg, var(--bg) 0%, #1A237E 50%, var(--bg) 100%);
-            text-align: center;
-            padding: 48px 20px 36px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::after {
+        body::before {
             content: '';
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 50%, rgba(76, 175, 80, 0.15) 0%, transparent 60%);
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: -1;
+        }
+
+        /* ---------------------------------
+           SCROLL REVEAL ANIMATIONS
+        ---------------------------------- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        /* ---------------------------------
+           HERO SECTION
+        ---------------------------------- */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, transparent 100%);
+            padding: 100px 20px 60px;
         }
 
         .hero-content {
@@ -57,44 +102,46 @@
         }
 
         .hero h1 {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 4px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2.5em, 6vw, 4em);
+            margin-bottom: 8px;
+            color: var(--text1);
+            animation: scaleIn 0.8s ease;
         }
 
         .hero h1 span {
-            color: var(--accent);
+            color: var(--gold);
         }
 
         .hero .tagline {
             font-size: 1.3em;
-            font-weight: 500;
-            color: #fff;
-            margin-bottom: 4px;
+            font-weight: 700;
+            color: var(--text1);
+            margin-bottom: 8px;
+            animation: fadeUp 1s ease 0.3s both;
         }
 
         .hero .sub-tagline {
-            font-size: 1em;
+            font-size: 1.1em;
             font-weight: 700;
-            color: #FFDD00;
-            letter-spacing: 1px;
-        }
-
-        .hero .subtitle {
-            font-size: 1.2em;
-            color: var(--text2);
-            font-weight: 300;
+            color: var(--red);
+            letter-spacing: 0.5px;
+            margin-bottom: 24px;
+            animation: fadeUp 1s ease 0.4s both;
         }
 
         .hero .badge {
             display: inline-block;
-            background: var(--accent);
-            color: #000;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 500;
-            margin-top: 16px;
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text1);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9em;
+            font-weight: 700;
+            animation: fadeUp 1s ease 0.5s both;
+            backdrop-filter: blur(10px);
         }
 
         /* Container */
@@ -106,75 +153,100 @@
 
         /* Section */
         .section {
-            padding: 32px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 60px 0;
+            position: relative;
         }
 
-        .section:last-child {
-            border-bottom: none;
+        /* Subtle divider between sections instead of borders */
+        .section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.05), transparent);
+        }
+
+        .section:last-child::after {
+            display: none;
         }
 
         .section-title {
-            font-size: 1.4em;
-            font-weight: 700;
-            margin-bottom: 4px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 900;
+            font-size: clamp(1.6em, 4vw, 2.2em);
+            color: var(--text1);
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .section-title .emoji {
-            font-size: 1em;
+            gap: 12px;
         }
 
         .section-desc {
             color: var(--text2);
-            font-size: 0.9em;
-            margin-bottom: 16px;
+            font-size: 1em;
+            margin-bottom: 32px;
+            font-weight: 500;
         }
 
-        /* Feature Cards */
+        /* Glassmorphism card utility */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+            border-radius: 16px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+            border-color: #fff;
+        }
+
+        /* Features Grid */
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
         }
 
         .feature-card {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
+            padding: 24px;
         }
 
         .feature-card .icon {
-            font-size: 1.5em;
-            margin-bottom: 6px;
+            font-size: 2em;
+            margin-bottom: 12px;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover .icon {
+            transform: scale(1.1);
         }
 
         .feature-card h3 {
-            font-size: 1em;
-            font-weight: 500;
-            margin-bottom: 4px;
+            font-size: 1.15em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text1);
         }
 
         .feature-card p {
             color: var(--text2);
-            font-size: 0.85em;
-            line-height: 1.5;
+            font-size: 0.9em;
+            line-height: 1.6;
         }
 
         /* Mode comparison */
         .mode-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 24px;
         }
 
         @media (max-width: 600px) {
@@ -184,37 +256,37 @@
         }
 
         .mode-card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 32px 24px;
             text-align: center;
         }
 
         .mode-card h3 {
-            font-size: 1.1em;
-            margin-bottom: 12px;
+            font-size: 1.2em;
+            margin-bottom: 16px;
+            font-weight: 700;
         }
 
         .mode-card .preview {
-            background: #000;
-            border-radius: 8px;
-            padding: 16px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            border-radius: 12px;
+            padding: 20px 16px;
             font-family: monospace;
-            margin-bottom: 12px;
-            font-size: 0.95em;
+            margin-bottom: 16px;
+            font-size: 1em;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .mode-card .preview .green {
-            color: var(--accent);
+            color: #4CAF50;
         }
 
         .mode-card .preview .red {
-            color: var(--red);
+            color: #F44336;
         }
 
         .mode-card .preview .dim {
-            opacity: 0.3;
+            opacity: 0.4;
         }
 
         /* Steps */
@@ -225,130 +297,160 @@
         }
 
         .step {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 20px 24px;
+            padding: 24px;
             display: flex;
-            gap: 16px;
+            gap: 20px;
             align-items: flex-start;
-            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .step-num {
-            background: var(--accent);
-            color: #000;
-            width: 32px;
-            height: 32px;
+            background: var(--gold);
+            color: #fff;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 0.9em;
+            font-weight: 900;
+            font-size: 1em;
             flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(255, 143, 0, 0.3);
         }
 
         .step-content h4 {
-            font-weight: 500;
-            margin-bottom: 4px;
+            font-weight: 700;
+            font-size: 1.1em;
+            margin-bottom: 6px;
+            color: var(--text1);
         }
 
         .step-content p {
             color: var(--text2);
-            font-size: 0.9em;
+            font-size: 0.95em;
         }
 
         /* Table */
         .info-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 16px;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(16px);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
         }
 
         .info-table th,
         .info-table td {
-            padding: 12px 16px;
+            padding: 16px 20px;
             text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .info-table th {
-            color: var(--accent);
-            font-weight: 500;
-            font-size: 0.9em;
+            color: var(--text1);
+            font-weight: 700;
+            font-size: 1em;
+            background: rgba(0, 0, 0, 0.02);
         }
 
         .info-table td {
             color: var(--text2);
-            font-size: 0.9em;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .info-table tr:last-child td {
+            border-bottom: none;
         }
 
         /* Gesture */
         .gesture-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 16px;
         }
 
         .gesture-item {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 16px 20px;
+            padding: 20px 24px;
             display: flex;
             align-items: center;
-            gap: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            gap: 20px;
         }
 
         .gesture-item .action {
-            background: var(--bg);
-            padding: 6px 14px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 8px 16px;
             border-radius: 8px;
-            font-size: 0.85em;
-            font-weight: 500;
+            font-size: 0.9em;
+            font-weight: 700;
             white-space: nowrap;
-            min-width: 80px;
+            min-width: 90px;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .gesture-item .result {
             color: var(--text2);
-            font-size: 0.9em;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text2);
-            font-size: 0.85em;
-        }
-
-        .footer a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        /* Tag */
-        .tag {
-            display: inline-block;
-            background: rgba(76, 175, 80, 0.15);
-            color: var(--accent2);
-            padding: 3px 10px;
-            border-radius: 6px;
-            font-size: 0.8em;
+            font-size: 0.95em;
             font-weight: 500;
         }
 
-        /* Coffee */
-        .coffee-section {
+        /* Settings Grid */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .settings-grid .gesture-item {
+            padding: 16px;
+            gap: 16px;
+        }
+
+        /* Privacy Grid */
+        .privacy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .privacy-card {
             text-align: center;
-            padding: 40px 0;
+            padding: 32px 20px;
+        }
+
+        .privacy-card .icon {
+            font-size: 2.5em;
+            margin-bottom: 16px;
+        }
+
+        .privacy-card h3 {
+            font-size: 1.1em;
+            font-weight: 700;
+        }
+
+        /* Coffee Section */
+        .finale {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(0deg, rgba(255, 255, 255, 0.7) 0%, transparent 100%);
         }
 
         .coffee-icon {
             font-size: 4em;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            display: inline-block;
             animation: float 3s ease-in-out infinite;
         }
 
@@ -364,34 +466,94 @@
             }
         }
 
-        .coffee-section h2 {
-            font-size: 1.5em;
-            margin-bottom: 12px;
+        .finale h2 {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 900;
+            font-size: clamp(1.6em, 4vw, 2.2em);
+            margin-bottom: 16px;
+            color: var(--text1);
         }
 
-        .coffee-section p {
+        .finale p {
             color: var(--text2);
-            font-size: 0.95em;
-            line-height: 1.6;
+            font-size: 1em;
+            margin-bottom: 32px;
+            font-weight: 500;
         }
 
         .coffee-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 14px 32px;
-            background: linear-gradient(135deg, #FFDD00, #FF9100);
-            color: #000;
-            font-size: 1.1em;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 18px 48px;
+            background: var(--text1);
+            color: #fff;
+            font-size: 1.2en;
             font-weight: 700;
             border-radius: 50px;
             text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(255, 145, 0, 0.3);
+            letter-spacing: 1px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s, background 0.3s;
         }
 
         .coffee-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 145, 0, 0.5);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            background: #000;
+        }
+
+        .coffee-sub {
+            display: block;
+            margin-top: 20px;
+            font-size: 0.85em !important;
+            color: #888 !important;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text2);
+            font-size: 0.85em;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .footer a {
+            color: var(--text1);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+            color: var(--gold);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
     </style>
 </head>
@@ -404,42 +566,42 @@
             <h1>슬쩍 <span>(peekr)</span></h1>
             <p class="tagline">실시간 주식·코인 가격을 슬쩍 확인하세요</p>
             <p class="sub-tagline">K직장인들의 확실한 투자 파트너 !!!</p>
-            <span class="badge">Android App · 무료</span>
+            <span class="badge">기능 가이드 문서</span>
         </div>
     </div>
 
     <!-- 주요 기능 -->
     <div class="section">
         <div class="container">
-            <h2 class="section-title"><span class="emoji">✨</span> 주요 기능</h2>
-            <p class="section-desc">슬쩍이 제공하는 핵심 기능들을 소개합니다</p>
+            <h2 class="section-title reveal"><span class="emoji">✨</span> 주요 기능</h2>
+            <p class="section-desc reveal delay-1">슬쩍이 제공하는 핵심 기능들을 소개합니다</p>
             <div class="features">
-                <div class="feature-card">
+                <div class="feature-card glass-card reveal delay-1">
                     <div class="icon">🖥️</div>
                     <h3>화면보호기</h3>
                     <p>충전 중 자동으로 활성화되어 실시간 주식·코인 가격을 아름다운 레이아웃으로 표시합니다.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card glass-card reveal delay-2">
                     <div class="icon">📌</div>
                     <h3>오버레이 위젯</h3>
                     <p>다른 앱 위에 항상 표시되는 플로팅 가격 바. 어떤 앱을 사용하면서도 실시간 가격을 확인하세요.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card glass-card reveal delay-3">
                     <div class="icon">🕶️</div>
                     <h3>스텔스 모드</h3>
                     <p>숫자만 워터마크처럼 표시. 주변 사람들이 눈치채지 못하게 가격을 확인할 수 있습니다.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card glass-card reveal delay-1">
                     <div class="icon">📊</div>
                     <h3>실시간 시세</h3>
                     <p>네이버 금융 API로 국내 주식, Binance WebSocket으로 암호화폐 가격을 실시간으로 수신합니다.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card glass-card reveal delay-2">
                     <div class="icon">🖼️</div>
                     <h3>사진 배경</h3>
                     <p>로컬 사진 폴더, 온라인 이미지 등 다양한 소스로 화면보호기 배경을 꾸밀 수 있습니다.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card glass-card reveal delay-3">
                     <div class="icon">🎨</div>
                     <h3>자유로운 커스터마이징</h3>
                     <p>글꼴 크기, 색상, 투명도, 위치 등 세밀한 설정으로 나만의 화면을 만드세요.</p>
@@ -451,20 +613,20 @@
     <!-- 화면보호기 템플릿 -->
     <div class="section">
         <div class="container">
-            <h2 class="section-title"><span class="emoji">🖥️</span> 화면보호기 템플릿</h2>
-            <p class="section-desc">3가지 레이아웃 중 취향에 맞게 선택하세요</p>
+            <h2 class="section-title reveal"><span class="emoji">🖥️</span> 화면보호기 템플릿</h2>
+            <p class="section-desc reveal delay-1">3가지 레이아웃 중 취향에 맞게 선택하세요</p>
             <div class="features">
-                <div class="feature-card">
+                <div class="feature-card glass-card reveal delay-1">
                     <div class="icon">🎯</div>
                     <h3>센터 모드</h3>
                     <p>화면 중앙에 시계와 가격 정보를 집중 배치. 깔끔하고 심플한 디자인.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card glass-card reveal delay-2">
                     <div class="icon">📐</div>
                     <h3>분할 모드</h3>
                     <p>화면을 분할하여 시계, 날씨, 가격 정보를 각 영역에 배치. 정보량이 많을 때 추천.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card glass-card reveal delay-3">
                     <div class="icon">🖼️</div>
                     <h3>포토프레임 모드</h3>
                     <p>사진 배경 위에 시계와 가격을 오버레이 표시. 디지털 액자처럼 활용 가능.</p>
@@ -476,35 +638,37 @@
     <!-- 오버레이 위젯 -->
     <div class="section">
         <div class="container">
-            <h2 class="section-title"><span class="emoji">📌</span> 오버레이 위젯</h2>
-            <p class="section-desc">다른 앱 위에 항상 떠 있는 실시간 가격 바</p>
+            <h2 class="section-title reveal"><span class="emoji">📌</span> 오버레이 위젯</h2>
+            <p class="section-desc reveal delay-1">다른 앱 위에 항상 떠 있는 실시간 가격 바</p>
 
             <div class="mode-grid">
-                <div class="mode-card">
+                <div class="mode-card glass-card reveal delay-1">
                     <h3>👁 일반 모드</h3>
                     <div class="preview">
                         삼전 <span class="green">72,500 ▲2.1%</span> · BTC <span class="red">$65,544 ▼0.8%</span>
                     </div>
-                    <p style="color:var(--text2);font-size:0.85em;">이름 + 가격 + 등락률<br>반투명 검정 배경</p>
+                    <p style="color:var(--text2);font-size:0.9em;font-weight:500;">이름 + 가격 + 등락률<br>반투명 검정 배경</p>
                 </div>
-                <div class="mode-card">
+                <div class="mode-card glass-card reveal delay-2">
                     <h3>🕶 스텔스 모드</h3>
                     <div class="preview">
                         <span class="dim">72500 65544 173500</span>
                     </div>
-                    <p style="color:var(--text2);font-size:0.85em;">숫자만 워터마크 스타일<br>~20% 투명도</p>
+                    <p style="color:var(--text2);font-size:0.9em;font-weight:500;">숫자만 워터마크 스타일<br>극강의 투명도로 위장</p>
                 </div>
             </div>
 
-            <h3 style="margin-top:32px;margin-bottom:16px;">제스처 조작</h3>
+            <h3 class="reveal"
+                style="font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:1.4em;margin-top:40px;margin-bottom:16px;color:var(--text1);">
+                제스처 조작</h3>
             <div class="gesture-list">
-                <div class="gesture-item">
+                <div class="gesture-item glass-card reveal delay-1">
                     <span class="action">탭</span>
-                    <span class="result">반응 없음 — 실수로 터치해도 움직이지 않습니다</span>
+                    <span class="result">반응 없음 — 실수로 터치해도 조작되지 않습니다</span>
                 </div>
-                <div class="gesture-item">
+                <div class="gesture-item glass-card reveal delay-2">
                     <span class="action">길게 누르기</span>
-                    <span class="result">팝업 메뉴 표시 — 위치 이동 / 모드 전환 / 설정 / 닫기</span>
+                    <span class="result">팝업 메뉴 표시 — 위치 이동 / 모드 전환 / 설정 / 위젯 닫기</span>
                 </div>
             </div>
         </div>
@@ -513,52 +677,56 @@
     <!-- 지원 시세 -->
     <div class="section">
         <div class="container">
-            <h2 class="section-title"><span class="emoji">💰</span> 지원 시세</h2>
-            <p class="section-desc">암호화폐와 국내 주식을 동시에 확인할 수 있습니다</p>
-            <table class="info-table">
-                <tr>
-                    <th>종류</th>
-                    <th>데이터 소스</th>
-                    <th>갱신</th>
-                </tr>
-                <tr>
-                    <td>암호화폐 (BTC, ETH, SOL 등)</td>
-                    <td>Binance WebSocket API</td>
-                    <td>실시간</td>
-                </tr>
-                <tr>
-                    <td>코스피 / 코스닥 지수</td>
-                    <td>네이버 금융 API</td>
-                    <td>1분 간격</td>
-                </tr>
-                <tr>
-                    <td>국내 개별 주식 (삼성전자 등)</td>
-                    <td>네이버 금융 API</td>
-                    <td>1분 간격</td>
-                </tr>
-            </table>
+            <h2 class="section-title reveal"><span class="emoji">💰</span> 지원 시세</h2>
+            <p class="section-desc reveal delay-1">국내 주식과 암호화폐를 동시에 확인할 수 있습니다</p>
+            <div class="reveal delay-2">
+                <table class="info-table">
+                    <tr>
+                        <th>종류</th>
+                        <th>데이터 소스</th>
+                        <th>갱신 주기</th>
+                    </tr>
+                    <tr>
+                        <td>암호화폐 (BTC, ETH, SOL 등)</td>
+                        <td>Binance WebSocket API</td>
+                        <td><strong>실시간 (0.1초)</strong></td>
+                    </tr>
+                    <tr>
+                        <td>코스피 / 코스닥 지수</td>
+                        <td>네이버 금융 API</td>
+                        <td>1분 간격</td>
+                    </tr>
+                    <tr>
+                        <td>국내 개별 주식 (삼성전자 등)</td>
+                        <td>네이버 금융 API</td>
+                        <td>1분 간격</td>
+                    </tr>
+                </table>
+            </div>
 
-            <h3 style="margin-top:32px;margin-bottom:16px;">종목 추가 방법</h3>
+            <h3 class="reveal"
+                style="font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:1.4em;margin-top:40px;margin-bottom:16px;color:var(--text1);">
+                종목 추가 방법</h3>
             <div class="steps">
-                <div class="step">
+                <div class="step glass-card reveal delay-1">
                     <span class="step-num">1</span>
                     <div class="step-content">
                         <h4>암호화폐</h4>
                         <p>Binance 티커를 직접 입력 (예: BTCUSDT, SOLUSDT)</p>
                     </div>
                 </div>
-                <div class="step">
+                <div class="step glass-card reveal delay-2">
                     <span class="step-num">2</span>
                     <div class="step-content">
                         <h4>국내 주식</h4>
                         <p>종목 이름으로 검색 (예: "삼성전자" → 자동으로 005930 변환)</p>
                     </div>
                 </div>
-                <div class="step">
+                <div class="step glass-card reveal delay-3">
                     <span class="step-num">3</span>
                     <div class="step-content">
                         <h4>순서 변경</h4>
-                        <p>▲▼ 버튼으로 표시 순서를 자유롭게 변경</p>
+                        <p>우측의 ▲▼ 화살표 버튼으로 표시 순서를 자유롭게 리오더링</p>
                     </div>
                 </div>
             </div>
@@ -568,23 +736,29 @@
     <!-- 설정 옵션 -->
     <div class="section">
         <div class="container">
-            <h2 class="section-title"><span class="emoji">⚙️</span> 설정 옵션</h2>
-            <p class="section-desc">세밀한 커스터마이징이 가능합니다</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                <div class="gesture-item"><span class="action">글꼴 크기</span><span class="result">슬라이더 조절</span></div>
-                <div class="gesture-item"><span class="action">정보 바</span><span class="result">상단 / 하단</span></div>
-                <div class="gesture-item"><span class="action">배경 색상</span><span class="result">컬러 피커</span></div>
-                <div class="gesture-item"><span class="action">글자 색상</span><span class="result">컬러 피커</span></div>
-                <div class="gesture-item"><span class="action">강조 색상</span><span class="result">컬러 피커</span></div>
-                <div class="gesture-item"><span class="action">초 표시</span><span class="result">ON / OFF</span></div>
-                <div class="gesture-item"><span class="action">달력</span><span class="result">ON / OFF</span></div>
-                <div class="gesture-item"><span class="action">날씨</span><span class="result">API Key + GPS</span></div>
-                <div class="gesture-item"><span class="action">사진 소스</span><span class="result">로컬 / 온라인</span></div>
-                <div class="gesture-item"><span class="action">사진 전환</span><span class="result">3초 / 10초 / 60초</span>
-                </div>
-                <div class="gesture-item"><span class="action">프리셋</span><span class="result">📱 폰 / 태블릿</span></div>
-                <div class="gesture-item"><span class="action">화면 방향</span><span class="result">자동 / 세로 / 가로</span>
-                </div>
+            <h2 class="section-title reveal"><span class="emoji">⚙️</span> 설정 옵션</h2>
+            <p class="section-desc reveal delay-1">나만의 취향을 반영하는 세밀한 커스터마이징</p>
+            <div class="settings-grid">
+                <div class="gesture-item glass-card reveal delay-1"><span class="action">글꼴 크기</span><span
+                        class="result">슬라이더 조절</span></div>
+                <div class="gesture-item glass-card reveal delay-2"><span class="action">정보 바</span><span
+                        class="result">상단 / 하단 배치</span></div>
+                <div class="gesture-item glass-card reveal delay-1"><span class="action">배경 색상</span><span
+                        class="result">컬러 피커 선택</span></div>
+                <div class="gesture-item glass-card reveal delay-2"><span class="action">글자 색상</span><span
+                        class="result">컬러 피커 선택</span></div>
+                <div class="gesture-item glass-card reveal delay-1"><span class="action">초 표시</span><span
+                        class="result">ON / OFF</span></div>
+                <div class="gesture-item glass-card reveal delay-2"><span class="action">강조 색상</span><span
+                        class="result">컬러 피커 선택</span></div>
+                <div class="gesture-item glass-card reveal delay-1"><span class="action">사진 소스</span><span
+                        class="result">로컬 폴더 / 온라인</span></div>
+                <div class="gesture-item glass-card reveal delay-2"><span class="action">사진 전환</span><span
+                        class="result">3초 / 10초 / 60초</span></div>
+                <div class="gesture-item glass-card reveal delay-1"><span class="action">프리셋</span><span
+                        class="result">📱 모바일 / 💻 태블릿</span></div>
+                <div class="gesture-item glass-card reveal delay-2"><span class="action">화면 방향</span><span
+                        class="result">자동 / 세로 / 가로 고정</span></div>
             </div>
         </div>
     </div>
@@ -592,18 +766,18 @@
     <!-- 개인정보 -->
     <div class="section">
         <div class="container">
-            <h2 class="section-title"><span class="emoji">🔒</span> 개인정보 보호</h2>
-            <p class="section-desc">슬쩍은 사용자의 개인정보를 수집하지 않습니다</p>
-            <div class="features" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                <div class="feature-card" style="text-align:center;">
+            <h2 class="section-title reveal"><span class="emoji">🔒</span> 개인정보 보호</h2>
+            <p class="section-desc reveal delay-1">슬쩍은 사용자의 뒤를 캐지 않습니다. 완벽하게 안전합니다.</p>
+            <div class="privacy-grid">
+                <div class="privacy-card glass-card reveal delay-1">
                     <div class="icon">🚫</div>
                     <h3>회원가입 없음</h3>
                 </div>
-                <div class="feature-card" style="text-align:center;">
+                <div class="privacy-card glass-card reveal delay-2">
                     <div class="icon">📱</div>
                     <h3>기기 내부 저장만</h3>
                 </div>
-                <div class="feature-card" style="text-align:center;">
+                <div class="privacy-card glass-card reveal delay-3">
                     <div class="icon">🔐</div>
                     <h3>서버 전송 없음</h3>
                 </div>
@@ -612,30 +786,47 @@
     </div>
 
     <!-- 후원 -->
-    <div class="section">
-        <div class="container">
-            <div class="coffee-section">
-                <div class="coffee-icon">☕</div>
-                <h2>개발자에게 커피 한 잔 사주기</h2>
-                <p>슬쩍이 유용하셨다면, 커피 한 잔으로 응원해 주세요!<br>
-                    여러분의 후원이 더 나은 업데이트의 원동력이 됩니다 ☕️</p>
-                <a href="https://qr.kakaopay.com/Ej8ZV7ZuB" target="_blank" class="coffee-btn">
-                    ☕ 카카오페이로 커피 사주기
-                </a>
-                <p style="font-size:0.75em;color:var(--text2);margin-top:12px;">
-                    카카오페이 QR로 간편하게 후원할 수 있습니다 🙏
-                </p>
-            </div>
-        </div>
+    <div class="finale reveal">
+        <div class="coffee-icon">☕</div>
+        <h2>개발자에게 커피 한 잔 사주기</h2>
+        <p>슬쩍이 유용하셨다면, 커피 한 잔으로 자유롭게 응원해 주세요!<br>
+            여러분의 후원은 서버 유지비용이 아닌 개발자의 야근 식대가 됩니다 ☕️</p>
+        <a href="https://qr.kakaopay.com/Ej8ZV7ZuB" target="_blank" class="coffee-btn reveal delay-1">
+            ☕ 카카오페이로 쿨하게 쏘기
+        </a>
+        <span class="coffee-sub reveal delay-2">카카오페이 송금 QR로 연결됩니다 🙏</span>
     </div>
 
     <!-- Footer -->
     <div class="footer">
-        <p>슬쩍(peekr) · 실시간 코인·주식 화면보호기 & 오버레이</p>
-        <p style="margin-top:8px;"><a href="./privacy.html">개인정보 처리방침</a> · 📧 s2001352@gmail.com</p>
-        <p style="margin-top:12px;font-size:0.8em;">© 2026 peekr. All rights reserved.</p>
+        <p style="font-weight:700;margin-bottom:8px;font-size:1.1em;color:var(--text1);">슬쩍(peekr) · K직장인들의 확실한 투자 파트너
+        </p>
+        <p style="margin-top:8px;"><a href="./privacy.html">개인정보 처리방침</a> &nbsp;·&nbsp; 📧 s2001352@gmail.com</p>
+        <p style="margin-top:16px;font-size:0.95em;">© 2026 peekr. All rights reserved.</p>
     </div>
 
+    <!-- JS for Scroll Animations -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px -50px 0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach((el) => {
+                observer.observe(el);
+            });
+        });
+    </script>
 </body>
 
 </html>
