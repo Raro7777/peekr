@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>슬쩍(peekr) - 지금까지 이런 화면보호기는 없었다</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --gold: #FFD700;
+            --red: #FF1744;
+            --dark: #0a0a0a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--dark);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Hero - cinematic */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(180deg, #000 0%, #0a0a2e 40%, #1a0a0a 70%, #000 100%);
+            position: relative;
+            padding: 40px 20px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(255, 23, 68, 0.1) 0%, transparent 70%);
+        }
+
+        .hero * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .pre-title {
+            font-size: 1.1em;
+            color: #888;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            animation: fadeDown 1s ease;
+        }
+
+        .main-quote {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: clamp(2em, 7vw, 4.5em);
+            line-height: 1.3;
+            margin-bottom: 12px;
+            animation: scaleIn 0.8s ease;
+        }
+
+        .main-quote .highlight {
+            color: var(--gold);
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+        }
+
+        .main-quote .red {
+            color: var(--red);
+        }
+
+        .sub-quote {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: clamp(1.5em, 4vw, 2.5em);
+            color: var(--gold);
+            margin-bottom: 30px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            animation: fadeUp 1s ease 0.3s both;
+        }
+
+        .tagline {
+            font-size: 1em;
+            color: #aaa;
+            margin-bottom: 40px;
+            animation: fadeUp 1s ease 0.5s both;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 18px 48px;
+            background: linear-gradient(135deg, var(--red), #FF6D00);
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: 900;
+            border-radius: 50px;
+            text-decoration: none;
+            letter-spacing: 2px;
+            animation: pulse 2s infinite, fadeUp 1s ease 0.7s both;
+            box-shadow: 0 0 30px rgba(255, 23, 68, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Scenes */
+        .scene {
+            padding: 60px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .scene-title {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: clamp(1.5em, 4vw, 2.2em);
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .scene-sub {
+            text-align: center;
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 32px;
+        }
+
+        /* Dramatic divider */
+        .divider {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, transparent, rgba(255, 23, 68, 0.05), transparent);
+        }
+
+        .divider-text {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: clamp(1.8em, 5vw, 3em);
+            color: var(--red);
+            text-shadow: 0 0 20px rgba(255, 23, 68, 0.3);
+        }
+
+        /* Comparison */
+        .compare {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .compare {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .compare .vs {
+                margin: 8px 0;
+            }
+        }
+
+        .compare-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .compare-card.old {
+            opacity: 0.5;
+        }
+
+        .compare-card.new {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+        }
+
+        .compare-card h3 {
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+
+        .compare-card .emoji {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+        }
+
+        .compare-card p {
+            color: #999;
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+
+        .compare-card.new p {
+            color: #ccc;
+        }
+
+        .vs {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 1.5em;
+            color: var(--red);
+        }
+
+        /* Feature drama */
+        .drama-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .drama-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .drama-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s, border-color 0.3s;
+        }
+
+        .drama-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--gold);
+        }
+
+        .drama-card .num {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: 2em;
+            color: var(--red);
+            opacity: 0.3;
+            line-height: 1;
+        }
+
+        .drama-card h3 {
+            font-size: 1em;
+            margin: 4px 0;
+        }
+
+        .drama-card p {
+            color: #888;
+            font-size: 0.82em;
+            line-height: 1.4;
+        }
+
+        /* Final CTA */
+        .finale {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(180deg, transparent, rgba(255, 215, 0, 0.03), transparent);
+        }
+
+        .finale-quote {
+            font-family: 'Black Han Sans', sans-serif;
+            font-size: clamp(1.3em, 4vw, 2.2em);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .finale-quote .gold {
+            color: var(--gold);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #555;
+            font-size: 0.8em;
+        }
+
+        .footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 30px rgba(255, 23, 68, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(255, 23, 68, 0.7);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SCENE 1: 오프닝 -->
+    <div class="hero">
+        <p class="pre-title">2 0 2 6</p>
+        <h1 class="main-quote">
+            지금까지 이런<br>
+            <span class="highlight">화면보호기</span>는<br>
+            <span class="red">없었다</span>
+        </h1>
+        <p class="sub-quote">— 슬쩍 (peekr) —</p>
+        <p class="tagline">K직장인들의 확실한 투자 파트너</p>
+        <a href="./guide.html" class="cta-btn">▶ 지금 확인하기</a>
+    </div>
+
+    <!-- SCENE 2: Before vs After -->
+    <div class="divider">
+        <p class="divider-text">그동안 우리는...</p>
+    </div>
+
+    <div class="scene">
+        <div class="compare">
+            <div class="compare-card old">
+                <div class="emoji">😰</div>
+                <h3>Before</h3>
+                <p>회의 중 몰래 네이버 주식 새로고침<br>화장실에서 바이낸스 확인<br>잠깐 페이지 띄웠다가 팀장 눈치...</p>
+            </div>
+            <div class="vs">VS</div>
+            <div class="compare-card new">
+                <div class="emoji">😎</div>
+                <h3>After</h3>
+                <p>충전만 하면 실시간 가격 자동 표시<br>오버레이로 어떤 앱 위에서든 확인<br>스텔스 모드로 완벽 위장</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 3: 극한의 기능 -->
+    <div class="divider">
+        <p class="divider-text">극한의 기능들</p>
+    </div>
+
+    <div class="scene">
+        <div class="drama-grid">
+            <div class="drama-card">
+                <div class="num">01</div>
+                <h3>🖥️ 화면보호기</h3>
+                <p>충전만 꽂으면 자동 실행. BTC, ETH, 삼성전자 가격이 화면에 줄줄이.</p>
+            </div>
+            <div class="drama-card">
+                <div class="num">02</div>
+                <h3>📌 오버레이 위젯</h3>
+                <p>유튜브 보면서, 카톡하면서, 회의록 쓰면서도 실시간 가격 확인.</p>
+            </div>
+            <div class="drama-card">
+                <div class="num">03</div>
+                <h3>🕶️ 스텔스 모드</h3>
+                <p>숫자만 워터마크처럼. 옆 사람은 절대 모른다. 완벽한 위장근무.</p>
+            </div>
+            <div class="drama-card">
+                <div class="num">04</div>
+                <h3>📊 실시간 시세</h3>
+                <p>바이낸스 WebSocket 실시간. 네이버 금융 1분 갱신. 0.1초도 안 놓친다.</p>
+            </div>
+            <div class="drama-card">
+                <div class="num">05</div>
+                <h3>🔎 종목 검색</h3>
+                <p>"삼성전자" 치면 005930 자동 변환. 코인도 주식도 한 곳에서.</p>
+            </div>
+            <div class="drama-card">
+                <div class="num">06</div>
+                <h3>🎨 커스터마이징</h3>
+                <p>글꼴, 색상, 배경 사진, 위치까지. 내 취향대로 완벽하게.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCENE 4: 극한 대사들 -->
+    <div class="divider">
+        <p class="divider-text">실제 사용 후기*</p>
+    </div>
+
+    <div class="scene">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+            <div
+                style="background:rgba(255,255,255,0.03);border-radius:12px;padding:20px;border-left:3px solid var(--gold);">
+                <p style="font-size:1.05em;">"충전기만 꽂으면 BTC가 보인다... <strong style="color:var(--gold)">이게 되네?</strong>"
+                </p>
+                <p style="color:#666;font-size:0.8em;margin-top:4px;">— 판교 직장인 K씨</p>
+            </div>
+            <div
+                style="background:rgba(255,255,255,0.03);border-radius:12px;padding:20px;border-left:3px solid var(--red);">
+                <p style="font-size:1.05em;">"팀장님 바로 뒤에서 <strong style="color:var(--red)">스텔스 모드</strong>로 시세 확인함"</p>
+                <p style="color:#666;font-size:0.8em;margin-top:4px;">— 강남 직장인 P씨</p>
+            </div>
+            <div
+                style="background:rgba(255,255,255,0.03);border-radius:12px;padding:20px;border-left:3px solid var(--gold);">
+                <p style="font-size:1.05em;">"삼전 -7% 뜨는 걸 실시간으로 봤다... <strong style="color:var(--gold)">슬쩍 안 봤으면 더
+                        물렸다</strong>"</p>
+                <p style="color:#666;font-size:0.8em;margin-top:4px;">— 여의도 직장인 L씨</p>
+            </div>
+        </div>
+        <p style="text-align:center;color:#444;font-size:0.7em;margin-top:12px;">*실제 후기는 아닙니다. 재미로 봐주세요 😄</p>
+    </div>
+
+    <!-- SCENE 5: 마지막 -->
+    <div class="finale">
+        <p class="finale-quote">
+            회의 중에도, 점심시간에도, 퇴근길에도<br>
+            <span class="gold">슬쩍</span> 확인하세요<br><br>
+            무료입니다.
+        </p>
+        <a href="./guide.html" class="cta-btn" style="margin-bottom:20px;">📖 기능 설명 보기</a>
+        <br><br>
+        <a href="https://qr.kakaopay.com/Ej8ZV7ZuB" target="_blank"
+            style="color:var(--gold);text-decoration:none;font-size:0.9em;">☕ 개발자에게 커피 한 잔 사주기</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>슬쩍(peekr) · K직장인들의 확실한 투자 파트너</p>
+        <p style="margin-top:4px;"><a href="./privacy.html">개인정보 처리방침</a> · <a href="./guide.html">기능 가이드</a></p>
+        <p style="margin-top:8px;">© 2026 peekr. All rights reserved.</p>
+    </div>
+
+</body>
+
+</html>
