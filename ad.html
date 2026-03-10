@@ -6,13 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>슬쩍(peekr) - 지금까지 이런 화면보호기는 없었다</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            --gold: #FFD700;
-            --red: #FF1744;
-            --dark: #0a0a0a;
+            --gold: #FF8F00;
+            /* Vibrant amber/orange for light bg */
+            --red: #D50000;
+            --bg: #F8F9FA;
+            --card: #FFFFFF;
+            --text1: #111111;
+            --text2: #555555;
+            --border: #E9ECEF;
         }
 
         * {
@@ -23,22 +28,23 @@
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background: var(--dark);
-            color: #fff;
+            background: var(--bg);
+            color: var(--text1);
             overflow-x: hidden;
         }
 
-        /* Hero - cinematic */
+        /* Hero - Light Cinematic */
         .hero {
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            background: linear-gradient(180deg, #000 0%, #0a0a2e 40%, #1a0a0a 70%, #000 100%);
+            /* Light gradient pulling down to reveal content */
+            background: linear-gradient(180deg, var(--card) 0%, #FFF8E1 50%, #FFEBEE 100%);
             position: relative;
-            padding: 40px 20px;
+            /* Reduced height so bottom content peeks up */
+            padding: 120px 20px 80px;
         }
 
         .hero::before {
@@ -48,7 +54,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(ellipse at center, rgba(255, 23, 68, 0.1) 0%, transparent 70%);
+            background: radial-gradient(ellipse at center, rgba(213, 0, 0, 0.03) 0%, transparent 70%);
         }
 
         .hero * {
@@ -67,15 +73,15 @@
 
         .main-quote {
             font-family: 'Black Han Sans', sans-serif;
-            font-size: clamp(2em, 7vw, 4.5em);
+            font-size: clamp(2.2em, 7vw, 4.5em);
             line-height: 1.3;
             margin-bottom: 12px;
             animation: scaleIn 0.8s ease;
+            color: #000;
         }
 
         .main-quote .highlight {
             color: var(--gold);
-            text-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
         }
 
         .main-quote .red {
@@ -87,34 +93,36 @@
             font-size: clamp(1.5em, 4vw, 2.5em);
             color: var(--gold);
             margin-bottom: 30px;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
             animation: fadeUp 1s ease 0.3s both;
+            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.05);
         }
 
         .tagline {
-            font-size: 1em;
-            color: #aaa;
+            font-size: 1.1em;
+            color: var(--text2);
+            font-weight: 500;
             margin-bottom: 40px;
             animation: fadeUp 1s ease 0.5s both;
         }
 
         .cta-btn {
             display: inline-block;
-            padding: 18px 48px;
-            background: linear-gradient(135deg, var(--red), #FF6D00);
+            padding: 16px 48px;
+            background: var(--text1);
             color: #fff;
             font-size: 1.2em;
-            font-weight: 900;
+            font-weight: 700;
             border-radius: 50px;
             text-decoration: none;
-            letter-spacing: 2px;
-            animation: pulse 2s infinite, fadeUp 1s ease 0.7s both;
-            box-shadow: 0 0 30px rgba(255, 23, 68, 0.4);
-            transition: transform 0.2s;
+            letter-spacing: 1px;
+            animation: fadeUp 1s ease 0.7s both;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s, background 0.2s;
         }
 
         .cta-btn:hover {
             transform: scale(1.05);
+            background: #000;
         }
 
         /* Scenes */
@@ -129,11 +137,12 @@
             font-size: clamp(1.5em, 4vw, 2.2em);
             text-align: center;
             margin-bottom: 8px;
+            color: var(--text1);
         }
 
         .scene-sub {
             text-align: center;
-            color: #888;
+            color: var(--text2);
             font-size: 0.9em;
             margin-bottom: 32px;
         }
@@ -142,14 +151,14 @@
         .divider {
             text-align: center;
             padding: 40px 20px;
-            background: linear-gradient(180deg, transparent, rgba(255, 23, 68, 0.05), transparent);
+            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.02), transparent);
         }
 
         .divider-text {
             font-family: 'Black Han Sans', sans-serif;
             font-size: clamp(1.8em, 5vw, 3em);
             color: var(--red);
-            text-shadow: 0 0 20px rgba(255, 23, 68, 0.3);
+            text-shadow: 0 4px 12px rgba(213, 0, 0, 0.1);
         }
 
         /* Comparison */
@@ -173,25 +182,29 @@
         }
 
         .compare-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 16px;
             padding: 24px;
             text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
         }
 
         .compare-card.old {
-            opacity: 0.5;
+            opacity: 0.7;
+            background: #F1F3F5;
         }
 
         .compare-card.new {
             border-color: var(--gold);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+            border-width: 2px;
+            box-shadow: 0 8px 24px rgba(255, 143, 0, 0.15);
         }
 
         .compare-card h3 {
-            font-size: 1em;
+            font-size: 1.1em;
             margin-bottom: 8px;
+            color: var(--text1);
         }
 
         .compare-card .emoji {
@@ -200,13 +213,15 @@
         }
 
         .compare-card p {
-            color: #999;
-            font-size: 0.85em;
-            line-height: 1.5;
+            color: var(--text2);
+            font-size: 0.9em;
+            line-height: 1.6;
+            font-weight: 500;
         }
 
         .compare-card.new p {
-            color: #ccc;
+            color: var(--text1);
+            font-weight: 700;
         }
 
         .vs {
@@ -219,7 +234,7 @@
         .drama-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 16px;
         }
 
         @media (max-width: 600px) {
@@ -229,49 +244,64 @@
         }
 
         .drama-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 20px;
-            transition: transform 0.2s, border-color 0.3s;
+            padding: 24px;
+            transition: transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
         }
 
         .drama-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
             border-color: var(--gold);
         }
 
         .drama-card .num {
             font-family: 'Black Han Sans', sans-serif;
-            font-size: 2em;
+            font-size: 2.2em;
             color: var(--red);
-            opacity: 0.3;
+            opacity: 0.1;
             line-height: 1;
+            margin-bottom: 4px;
         }
 
         .drama-card h3 {
-            font-size: 1em;
-            margin: 4px 0;
+            font-size: 1.1em;
+            margin: 4px 0 8px;
+            color: var(--text1);
+            font-weight: 700;
         }
 
         .drama-card p {
-            color: #888;
-            font-size: 0.82em;
-            line-height: 1.4;
+            color: var(--text2);
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        /* Quotes styling */
+        .quote-box {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border);
         }
 
         /* Final CTA */
         .finale {
             text-align: center;
             padding: 80px 20px;
-            background: linear-gradient(180deg, transparent, rgba(255, 215, 0, 0.03), transparent);
+            background: linear-gradient(180deg, transparent, #FFF8E1, transparent);
         }
 
         .finale-quote {
             font-family: 'Black Han Sans', sans-serif;
-            font-size: clamp(1.3em, 4vw, 2.2em);
-            margin-bottom: 20px;
+            font-size: clamp(1.4em, 4vw, 2.2em);
+            margin-bottom: 24px;
             line-height: 1.5;
+            color: var(--text1);
         }
 
         .finale-quote .gold {
@@ -281,14 +311,22 @@
         /* Footer */
         .footer {
             text-align: center;
-            padding: 30px 20px;
-            color: #555;
-            font-size: 0.8em;
+            padding: 40px 20px;
+            color: var(--text2);
+            font-size: 0.85em;
+            border-top: 1px solid var(--border);
+            background: var(--card);
         }
 
         .footer a {
-            color: var(--gold);
+            color: var(--text1);
             text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+            color: var(--gold);
         }
 
         /* Animations */
@@ -325,18 +363,6 @@
             to {
                 opacity: 1;
                 transform: scale(1);
-            }
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 30px rgba(255, 23, 68, 0.4);
-            }
-
-            50% {
-                box-shadow: 0 0 50px rgba(255, 23, 68, 0.7);
             }
         }
     </style>
@@ -379,13 +405,14 @@
     </div>
 
     <!-- SCENE 2.5: 명대사 -->
-    <div class="divider" style="padding:50px 20px;">
-        <p style="font-family:'Black Han Sans',sans-serif;font-size:clamp(1.2em,3.5vw,2em);color:#fff;line-height:1.6;">
+    <div class="divider" style="padding:40px 20px;">
+        <p
+            style="font-family:'Black Han Sans',sans-serif;font-size:clamp(1.4em,4vw,2.2em);color:var(--text1);line-height:1.5;">
             상사는 배경화면을 본다.<br>
-            <span style="color:var(--gold);font-size:1.2em;">나는 수익률을 본다.</span>
+            <span style="color:var(--gold);">나는 수익률을 본다.</span>
         </p>
         <p
-            style="font-family:'Black Han Sans',sans-serif;font-size:clamp(0.9em,2.5vw,1.3em);color:var(--red);margin-top:16px;opacity:0.8;">
+            style="font-family:'Black Han Sans',sans-serif;font-size:clamp(1em,2.5vw,1.3em);color:var(--red);margin-top:16px;">
             " 사장님들이 보면 질색할 그런 앱 "
         </p>
     </div>
@@ -437,26 +464,26 @@
 
     <div class="scene">
         <div style="display:flex;flex-direction:column;gap:16px;">
-            <div
-                style="background:rgba(255,255,255,0.03);border-radius:12px;padding:20px;border-left:3px solid var(--gold);">
-                <p style="font-size:1.05em;">"충전기만 꼽으면 삼전이랑 BTC가 보인다... <strong style="color:var(--gold);">이게
+            <div class="quote-box" style="border-left:4px solid var(--gold);">
+                <p style="font-size:1.1em;font-weight:700;color:var(--text1);">"충전기만 꼽으면 삼전이랑 BTC가 보인다... <strong
+                        style="color:var(--gold);">이게
                         되네?</strong>"
                 </p>
-                <p style="color:#666;font-size:0.8em;margin-top:4px;">— 판교 직장인 K씨</p>
+                <p style="color:var(--text2);font-size:0.85em;margin-top:6px;">— 판교 직장인 K씨</p>
             </div>
-            <div
-                style="background:rgba(255,255,255,0.03);border-radius:12px;padding:20px;border-left:3px solid var(--red);">
-                <p style="font-size:1.05em;">"팀장님 바로 뒤에서 <strong style="color:var(--red)">스텔스 모드</strong>로 시세 확인함"</p>
-                <p style="color:#666;font-size:0.8em;margin-top:4px;">— 강남 직장인 P씨</p>
+            <div class="quote-box" style="border-left:4px solid var(--red);">
+                <p style="font-size:1.1em;font-weight:700;color:var(--text1);">"팀장님 바로 뒤에서 <strong
+                        style="color:var(--red)">스텔스 모드</strong>로 시세 확인함"</p>
+                <p style="color:var(--text2);font-size:0.85em;margin-top:6px;">— 강남 직장인 P씨</p>
             </div>
-            <div
-                style="background:rgba(255,255,255,0.03);border-radius:12px;padding:20px;border-left:3px solid var(--gold);">
-                <p style="font-size:1.05em;">"삼전 -7% 뜨는 걸 실시간으로 봤다... <strong style="color:var(--gold);">슬쩍 안 봤으면 더
+            <div class="quote-box" style="border-left:4px solid var(--gold);">
+                <p style="font-size:1.1em;font-weight:700;color:var(--text1);">"삼전 -7% 뜨는 걸 실시간으로 봤다... <strong
+                        style="color:var(--gold);">슬쩍 안 봤으면 더
                         물렸다</strong>"</p>
-                <p style="color:#666;font-size:0.8em;margin-top:4px;">— 여의도 직장인 L씨</p>
+                <p style="color:var(--text2);font-size:0.85em;margin-top:6px;">— 여의도 직장인 L씨</p>
             </div>
         </div>
-        <p style="text-align:center;color:#444;font-size:0.7em;margin-top:12px;">*실제 후기는 아닙니다. 재미로 봐주세요 😄</p>
+        <p style="text-align:center;color:#888;font-size:0.75em;margin-top:16px;">*실제 후기는 아닙니다. 재미로 봐주세요 😄</p>
     </div>
 
     <!-- SCENE 5: 마지막 -->
@@ -466,17 +493,18 @@
             <span class="gold">슬쩍</span> 확인하세요<br><br>
             무료입니다.
         </p>
-        <a href="./guide.html" class="cta-btn" style="margin-bottom:20px;">📖 기능 설명 보기</a>
+        <a href="./guide.html" class="cta-btn" style="margin-bottom:24px;">📖 기능 설명 보기</a>
         <br><br>
         <a href="https://qr.kakaopay.com/Ej8ZV7ZuB" target="_blank"
-            style="color:var(--gold);text-decoration:none;font-size:0.9em;">☕ 개발자에게 커피 한 잔 사주기</a>
+            style="color:var(--red);text-decoration:none;font-size:0.95em;font-weight:700;">☕ 개발자에게 카카오페이로 커피 한 잔
+            사주기</a>
     </div>
 
     <!-- Footer -->
     <div class="footer">
-        <p>슬쩍(peekr) · K직장인들의 확실한 투자 파트너</p>
-        <p style="margin-top:4px;"><a href="./privacy.html">개인정보 처리방침</a> · <a href="./guide.html">기능 가이드</a></p>
-        <p style="margin-top:8px;">© 2026 peekr. All rights reserved.</p>
+        <p style="font-weight:700;margin-bottom:8px;">슬쩍(peekr) · K직장인들의 확실한 투자 파트너</p>
+        <p><a href="./privacy.html">개인정보 처리방침</a> &nbsp;·&nbsp; <a href="./guide.html">기능 가이드</a></p>
+        <p style="margin-top:12px;font-size:0.9em;">© 2026 peekr. All rights reserved.</p>
     </div>
 
 </body>
