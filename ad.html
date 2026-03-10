@@ -355,6 +355,41 @@
         }
 
         /* ---------------------------------
+           PROMO GALLERY
+        ---------------------------------- */
+        .promo-gallery {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 20px 60px 20px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+        }
+
+        .promo-gallery::-webkit-scrollbar {
+            display: none;
+        }
+
+        .promo-img {
+            height: 480px;
+            border-radius: 24px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+            scroll-snap-align: center;
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+
+        .promo-img:hover {
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 600px) {
+            .promo-img {
+                height: 380px;
+            }
+        }
+
+        /* ---------------------------------
            QUOTES BOX
         ---------------------------------- */
         .quote-box {
@@ -504,6 +539,19 @@
             <span style="color:var(--text2);font-size:0.85em;">직장인들끼리는 서로 안다.</span><br>
             <span style="color:var(--gold);">"야 너도? 야 나도!"</span>
         </p>
+    </div>
+
+    <!-- SCENE 2.7: 실제 적용 화면 -->
+    <div class="divider reveal" style="padding:40px 20px 0;">
+        <p class="divider-text">실제 적용 화면</p>
+    </div>
+
+    <div class="scene">
+        <div class="promo-gallery">
+            <img src="./assets/promo_1_split.png" alt="화면보호기 분할 화면" class="promo-img reveal delay-1">
+            <img src="./assets/promo_2_stealth.png" alt="스텔스 모드 오버레이" class="promo-img reveal delay-2">
+            <img src="./assets/promo_3_photo.png" alt="사진 배경 화면보호기" class="promo-img reveal delay-3">
+        </div>
     </div>
 
     <!-- SCENE 3: 극한의 기능 -->
