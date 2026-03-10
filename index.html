@@ -36,7 +36,7 @@
         .hero {
             background: linear-gradient(135deg, var(--bg) 0%, #1A237E 50%, var(--bg) 100%);
             text-align: center;
-            padding: 80px 20px 60px;
+            padding: 48px 20px 36px;
             position: relative;
             overflow: hidden;
         }
@@ -57,13 +57,27 @@
         }
 
         .hero h1 {
-            font-size: 3em;
+            font-size: 2.5em;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .hero h1 span {
             color: var(--accent);
+        }
+
+        .hero .tagline {
+            font-size: 1.3em;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .hero .sub-tagline {
+            font-size: 1em;
+            font-weight: 700;
+            color: #FFDD00;
+            letter-spacing: 1px;
         }
 
         .hero .subtitle {
@@ -92,7 +106,7 @@
 
         /* Section */
         .section {
-            padding: 60px 0;
+            padding: 32px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -101,35 +115,35 @@
         }
 
         .section-title {
-            font-size: 1.8em;
+            font-size: 1.4em;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
         }
 
         .section-title .emoji {
-            font-size: 1.2em;
+            font-size: 1em;
         }
 
         .section-desc {
             color: var(--text2);
-            font-size: 0.95em;
-            margin-bottom: 32px;
+            font-size: 0.9em;
+            margin-bottom: 16px;
         }
 
         /* Feature Cards */
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
         }
 
         .feature-card {
             background: var(--card);
-            border-radius: 16px;
-            padding: 28px;
+            border-radius: 12px;
+            padding: 18px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             transition: transform 0.2s, border-color 0.2s;
         }
@@ -140,20 +154,20 @@
         }
 
         .feature-card .icon {
-            font-size: 2em;
-            margin-bottom: 12px;
+            font-size: 1.5em;
+            margin-bottom: 6px;
         }
 
         .feature-card h3 {
-            font-size: 1.1em;
+            font-size: 1em;
             font-weight: 500;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .feature-card p {
             color: var(--text2);
-            font-size: 0.9em;
-            line-height: 1.6;
+            font-size: 0.85em;
+            line-height: 1.5;
         }
 
         /* Mode comparison */
@@ -388,7 +402,8 @@
     <div class="hero">
         <div class="hero-content">
             <h1>슬쩍 <span>(peekr)</span></h1>
-            <p class="subtitle">실시간 코인·주식 가격을 화면보호기와 오버레이로 슬쩍 확인하세요</p>
+            <p class="tagline">실시간 코인·주식 가격을 슬쩍 확인하세요</p>
+            <p class="sub-tagline">K직장인들의 확실한 투자 파트너 !!!</p>
             <span class="badge">Android App · 무료</span>
         </div>
     </div>
