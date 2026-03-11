@@ -17,6 +17,8 @@
       --text: #e2e8f0;
       --muted: #64748b;
       --border: #1e2d44;
+      --cyan: #00E5FF;
+      --purple: #B388FF;
     }
     *{margin:0;padding:0;box-sizing:border-box;}
     html{scroll-behavior:smooth;}
@@ -348,6 +350,143 @@
     }
     .drama-card p{font-size:0.9em;color:var(--muted);line-height:1.8;}
 
+    /* ===== V2 UPDATE SECTION ===== */
+    .v2-section{
+      padding:100px 24px;
+      max-width:1100px;margin:0 auto;
+      position:relative;
+    }
+    .v2-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:linear-gradient(135deg,rgba(0,229,255,0.1),rgba(179,136,255,0.1));
+      border:1px solid rgba(179,136,255,0.3);
+      color:var(--cyan);
+      padding:8px 20px;border-radius:100px;
+      font-family:'JetBrains Mono',monospace;
+      font-size:12px;letter-spacing:2px;font-weight:700;
+      margin-bottom:20px;
+      animation:v2glow 3s ease-in-out infinite alternate;
+    }
+    @keyframes v2glow{
+      from{box-shadow:0 0 15px rgba(0,229,255,0.1)}
+      to{box-shadow:0 0 30px rgba(179,136,255,0.2)}
+    }
+    .v2-title{
+      font-size:clamp(2em,5vw,3em);
+      font-weight:900;line-height:1.2;
+      margin-bottom:48px;
+    }
+    .text-gradient{
+      background:linear-gradient(90deg,var(--cyan),var(--purple));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .v2-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+    }
+    .v2-card{
+      background:rgba(13,17,23,0.8);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:32px;
+      transition:all 0.4s cubic-bezier(0.2,0.8,0.2,1);
+      position:relative;
+      overflow:hidden;
+    }
+    .v2-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent);
+      opacity:0;transition:opacity 0.4s;
+    }
+    .v2-card:hover{
+      border-color:rgba(179,136,255,0.3);
+      transform:translateY(-4px);
+      box-shadow:0 20px 60px rgba(0,0,0,0.4);
+    }
+    .v2-card:hover::before{opacity:1;}
+    .v2-card-icon{
+      font-size:28px;margin-bottom:16px;display:block;
+      width:52px;height:52px;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.06);
+      border-radius:14px;
+    }
+    .v2-card h3{
+      font-size:1.1em;font-weight:900;
+      margin-bottom:10px;color:var(--text);
+    }
+    .v2-card p{
+      font-size:0.9em;color:var(--muted);line-height:1.8;
+    }
+
+    /* ===== ORIGINALITY SECTION ===== */
+    .orig-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:16px;
+    }
+    .orig-card{
+      background:var(--navy2);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:36px;
+      transition:all 0.3s;
+    }
+    .orig-card:hover{
+      background:#111827;
+      transform:translateY(-3px);
+      box-shadow:0 20px 50px rgba(0,0,0,0.3);
+    }
+    .orig-icon{font-size:32px;margin-bottom:16px;display:block;}
+    .orig-card h3{
+      font-size:1.15em;font-weight:900;
+      margin-bottom:12px;
+    }
+    .orig-card p{
+      font-size:0.9em;color:var(--muted);line-height:1.8;
+    }
+
+    /* ===== GALLERY ===== */
+    .gallery-section{
+      padding:100px 24px;max-width:1100px;margin:0 auto;
+    }
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+    .gallery-item{
+      position:relative;
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      aspect-ratio:9/16;
+      background:var(--navy2);
+      transition:all 0.4s;
+      cursor:pointer;
+    }
+    .gallery-item:hover{
+      transform:translateY(-8px) scale(1.02);
+      box-shadow:0 30px 60px rgba(0,0,0,0.5);
+      border-color:var(--blue);
+    }
+    .gallery-item img{
+      width:100%;height:100%;
+      object-fit:cover;
+      transition:transform 0.4s;
+    }
+    .gallery-item:hover img{transform:scale(1.05);}
+    .gallery-label{
+      position:absolute;bottom:0;left:0;right:0;
+      padding:20px 16px 16px;
+      background:linear-gradient(transparent,rgba(0,0,0,0.85));
+      font-size:0.8em;color:rgba(255,255,255,0.7);
+      font-weight:700;
+    }
+
     /* REVIEWS */
     .reviews-grid{display:flex;flex-direction:column;gap:20px;}
     .review-card{
@@ -401,6 +540,11 @@
     .footer-links a{color:var(--muted);text-decoration:none;font-size:13px;transition:color 0.2s;}
     .footer-links a:hover{color:var(--text);}
     .footer-copy{font-size:12px;color:var(--border);}
+    .footer-tagline{color:var(--muted);font-size:13px;margin-bottom:20px;}
+    .footer-privacy{
+      font-size:12px;color:var(--muted);opacity:0.7;
+      margin-top:12px;
+    }
 
     @keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
     @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -410,6 +554,9 @@
       nav .nav-links{display:none;}
       .compare-grid{grid-template-columns:1fr;}
       .drama-grid{grid-template-columns:1fr;}
+      .v2-grid{grid-template-columns:1fr;}
+      .orig-grid{grid-template-columns:1fr;}
+      .gallery-grid{grid-template-columns:repeat(2,1fr);}
       .vs-badge{display:none;}
       .hero-phone-row{gap:12px;}
       .phone{width:130px;height:260px;}
@@ -430,7 +577,7 @@
     <span class="ticker-item"><span class="ticker-sym">SK하이닉스</span><span class="up">138,500 ▲2.1%</span></span>
     <span class="ticker-item"><span class="ticker-sym">XRP/USDT</span><span class="up">1.385 ▲1.7%</span></span>
     <span class="ticker-item"><span class="ticker-sym">BNB/USDT</span><span class="up">646 ▲1.8%</span></span>
-    <!-- repeat -->
+    <!-- repeat for seamless loop -->
     <span class="ticker-item"><span class="ticker-sym">BTC/USDT</span><span class="up">70,411 ▲2.9%</span></span>
     <span class="ticker-item"><span class="ticker-sym">ETH/USDT</span><span class="up">2,057 ▲3.2%</span></span>
     <span class="ticker-item"><span class="ticker-sym">삼성전자</span><span class="up">71,400 ▲1.1%</span></span>
@@ -453,7 +600,9 @@
   </div>
 </nav>
 
+<!-- ============================================== -->
 <!-- HERO -->
+<!-- ============================================== -->
 <div class="hero">
   <div class="hero-orb orb1"></div>
   <div class="hero-orb orb2"></div>
@@ -477,7 +626,7 @@
   </div>
 
   <div class="hero-phone-row">
-    <!-- 일반 앱 화면 -->
+    <!-- 화면보호기 -->
     <div class="phone">
       <div class="p-cam"></div>
       <div class="p-screen">
@@ -538,7 +687,9 @@
 
 <hr class="full-divider"/>
 
+<!-- ============================================== -->
 <!-- BIG QUOTE -->
+<!-- ============================================== -->
 <div class="big-quote-section">
   <p class="big-quote reveal">
     <span class="red">사장님이 알면 큰일날 앱</span>
@@ -555,7 +706,9 @@
 
 <hr class="full-divider"/>
 
+<!-- ============================================== -->
 <!-- BEFORE / AFTER -->
+<!-- ============================================== -->
 <div class="section">
   <span class="section-label reveal">그동안 우리는...</span>
   <div class="compare-grid reveal d1">
@@ -585,7 +738,43 @@
 
 <hr class="full-divider"/>
 
-<!-- FEATURES -->
+<!-- ============================================== -->
+<!-- V2 UPDATE HIGHLIGHTS (from Landing Page) -->
+<!-- ============================================== -->
+<div class="v2-section">
+  <span class="v2-badge reveal">✨ V2 대규모 업데이트</span>
+  <h2 class="v2-title reveal d1">더 강력해진<br/><span class="text-gradient">초격차 커스텀 기능</span></h2>
+  <p class="section-desc reveal d2" style="margin-bottom:48px;">사용자 피드백을 반영하여 디테일을 한층 끌어올린 역대급 기능들을 바로 만나보세요.</p>
+
+  <div class="v2-grid">
+    <div class="v2-card reveal">
+      <span class="v2-card-icon">🖼️</span>
+      <h3>순수 사진 액자 모드</h3>
+      <p>시계, 코인 가격, 반투명 효과까지 모두 지우고 갤러리/명화 사진만 생생하게 꽉 찬 전체화면으로 감상하세요.</p>
+    </div>
+    <div class="v2-card reveal d1">
+      <span class="v2-card-icon">🎚️</span>
+      <h3>위젯 전체 투명도 슬라이더</h3>
+      <p>플로팅 위젯 전체의 불투명도를 10% 단위로 유령처럼 조절하여, 다른 작업 중 눈에 거슬리지 않게 세팅할 수 있습니다.</p>
+    </div>
+    <div class="v2-card reveal d2">
+      <span class="v2-card-icon">⏰</span>
+      <h3>미니멀 시계 전용 모드</h3>
+      <p>코인 시세창이 부담스러워 지우고 싶을 땐, 다 끄고 아주 날렵한 '날짜/시간 표시 전용 위젯'으로 띄워보세요.</p>
+    </div>
+    <div class="v2-card reveal d3">
+      <span class="v2-card-icon">🌤️</span>
+      <h3>영구 무료 날씨 연동</h3>
+      <p>복잡한 날씨 API 키 발급은 이제 그만! GPS 위치 활성화 한 번이면 내 지역의 날씨가 자동으로 완전 무료로 표출됩니다.</p>
+    </div>
+  </div>
+</div>
+
+<hr class="full-divider"/>
+
+<!-- ============================================== -->
+<!-- 6 CORE FEATURES -->
+<!-- ============================================== -->
 <div class="section">
   <span class="section-label reveal">극한의 기능들</span>
   <h2 class="section-title reveal d1">6가지 핵심 기능</h2>
@@ -631,7 +820,74 @@
 
 <hr class="full-divider"/>
 
+<!-- ============================================== -->
+<!-- ORIGINALITY (from Landing Page) -->
+<!-- ============================================== -->
+<div class="section">
+  <span class="section-label reveal">오리지널리티</span>
+  <h2 class="section-title reveal d1">슬쩍(peekr)만의 차별점</h2>
+  <div class="orig-grid reveal d2">
+    <div class="orig-card">
+      <span class="orig-icon">📊</span>
+      <h3>강력한 플로팅 오버레이</h3>
+      <p>유튜브를 볼 때나 웹서핑 시에도 모서리에 실시간 시세를 띄워둡니다. 노치(상태바) 영역 제한을 완전히 해제해 화면 가장 높은 꼭대기까지 마음대로 이동시킬 수 있습니다.</p>
+    </div>
+    <div class="orig-card">
+      <span class="orig-icon">🕶️</span>
+      <h3>은밀한 스텔스 모드</h3>
+      <p>등락률 색상(빨강/파랑)과 복잡한 배경을 감추고 숫자만 기기 배경화면에 스며들 듯 워터마크 형태로 보여주어, 주변 사람 모르게 은밀한 가격 확인이 가능합니다.</p>
+    </div>
+    <div class="orig-card">
+      <span class="orig-icon">📱</span>
+      <h3>스마트 스크린세이버</h3>
+      <p>기기를 충전기에 꽂기만 하면 아름다운 디스플레이가 켜집니다. 일반 2분할 템플릿, 센터 템플릿, 그리고 사진 액자 전환 기능 모두 화면 보호기 앱과의 완벽한 동기화를 지원합니다.</p>
+    </div>
+    <div class="orig-card">
+      <span class="orig-icon">⚡</span>
+      <h3>초고속 데이터 처리 & 보안</h3>
+      <p>바이낸스 WebSocket 기반의 1초 단위 코인 시세와 네이버 국내 주식(KOSPI, KOSDAQ) 데이터를 활용. 어떠한 회원가입이나 개인정보 서버 전송 없이 기기 내부에서 100% 안전하게 동작합니다.</p>
+    </div>
+  </div>
+</div>
+
+<hr class="full-divider"/>
+
+<!-- ============================================== -->
+<!-- GALLERY (from Landing Page) -->
+<!-- ============================================== -->
+<div class="gallery-section">
+  <span class="section-label reveal">미리보기</span>
+  <h2 class="section-title reveal d1" style="margin-bottom:12px;">Gallery</h2>
+  <p class="reveal d2" style="color:var(--muted);margin-bottom:48px;font-size:1em;">실제 구동 화면을 확인해 보세요.</p>
+  <div class="gallery-grid reveal d3">
+    <div class="gallery-item">
+      <img src="screenshot_1_center_1773207118515.png" alt="Center UI 화면보호기"
+        onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(160deg,#0a1628,#070d1a)';this.parentElement.querySelector('.gallery-label').style.opacity='1';">
+      <div class="gallery-label">센터 화면보호기</div>
+    </div>
+    <div class="gallery-item">
+      <img src="screenshot_4_photoframe_1773207158805.png" alt="Photo Frame (사진 액자)"
+        onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(160deg,#0a1628,#1a0d2e)';this.parentElement.querySelector('.gallery-label').style.opacity='1';">
+      <div class="gallery-label">사진 액자 모드</div>
+    </div>
+    <div class="gallery-item">
+      <img src="screenshot_3_stealth_1773207145537.png" alt="스텔스 모드"
+        onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(160deg,#1a2035,#0f172a)';this.parentElement.querySelector('.gallery-label').style.opacity='1';">
+      <div class="gallery-label">스텔스 모드</div>
+    </div>
+    <div class="gallery-item">
+      <img src="screenshot_2_landscape_1773207134065.png" alt="제어 센터 및 2분할 가로 화면"
+        onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(160deg,#0d1628,#0a1117)';this.parentElement.querySelector('.gallery-label').style.opacity='1';">
+      <div class="gallery-label">2분할 가로 화면</div>
+    </div>
+  </div>
+</div>
+
+<hr class="full-divider"/>
+
+<!-- ============================================== -->
 <!-- REVIEWS -->
+<!-- ============================================== -->
 <div class="section">
   <span class="section-label reveal">실제 사용 후기*</span>
   <div class="reviews-grid">
@@ -665,7 +921,9 @@
 
 <hr class="full-divider"/>
 
-<!-- FINALE -->
+<!-- ============================================== -->
+<!-- FINALE CTA -->
+<!-- ============================================== -->
 <div class="finale">
   <h2 class="finale-title reveal">
     회의 중에도, 점심시간에도, 퇴근길에도<br/>
@@ -689,21 +947,21 @@
 <!-- FOOTER -->
 <footer>
   <span class="footer-logo">슬쩍 · Peekr</span>
-  <p style="color:var(--muted);font-size:13px;margin-bottom:20px;">K직장인들의 확실한 투자 파트너</p>
+  <p class="footer-tagline">K직장인들의 확실한 투자 파트너</p>
   <div class="footer-links">
     <a href="./privacy.html">개인정보 처리방침</a>
     <a href="./guide.html">기능 가이드</a>
     <a href="https://open.kakao.com/o/g3FQiIki" target="_blank">카카오 오픈채팅</a>
     <a href="https://t.me/+4sopnsWSgJ82MTRl" target="_blank">텔레그램</a>
-    <a href="mailto:s2001352@gmail.com">문의</a>
   </div>
+  <p class="footer-privacy">100% On-Device · No Sign-up Required · Completely Private</p>
   <p class="footer-copy">© 2026 peekr. All rights reserved.</p>
 </footer>
 
 <script>
 const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('active');});
-},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('active')})
+},{threshold:0.15});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
 </body>

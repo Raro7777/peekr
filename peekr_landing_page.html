@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>슬쩍(peekr) - 코인·주식 위젯 & 화면보호기 액자</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(25, 30, 45, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #00E5FF;
+            --secondary: #B388FF;
+            --text-main: #ffffff;
+            --text-muted: #a0aabf;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .blur-circle {
+            position: absolute;
+            width: 50vw;
+            height: 50vw;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .circle-1 {
+            top: -10%;
+            left: -10%;
+            background: var(--primary);
+        }
+
+        .circle-2 {
+            bottom: 10%;
+            right: -10%;
+            background: var(--secondary);
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            padding: 2rem 5%;
+            justify-content: space-between;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-area img {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+        }
+
+        .nav-btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: #000;
+            font-weight: 800;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 6rem 1rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            word-break: keep-all;
+        }
+
+        .text-gradient {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 3rem auto;
+            word-break: keep-all;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--card-border);
+            margin-top: 2rem;
+            transition: transform 0.3s;
+        }
+
+        .hero-image:hover {
+            transform: translateY(-10px);
+        }
+
+        .section {
+            padding: 6rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(35, 40, 60, 0.8);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .card p,
+        .card ul {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .card ul {
+            margin-left: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .card li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-card {
+            background: linear-gradient(145deg, rgba(0, 229, 255, 0.05), rgba(179, 136, 255, 0.1));
+            border-color: rgba(179, 136, 255, 0.3);
+            grid-column: 1 / -1;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .gallery img {
+            width: 100%;
+            border-radius: 16px;
+            border: 1px solid var(--card-border);
+            transition: transform 0.3s;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+            cursor: pointer;
+        }
+
+        footer {
+            border-top: 1px solid var(--card-border);
+            padding: 3rem 5%;
+            text-align: center;
+            color: var(--text-muted);
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="blur-circle circle-1"></div>
+    <div class="blur-circle circle-2"></div>
+
+    <header>
+        <div class="logo-area">
+            <img src="playstore_app_icon_1773207104581.png" alt="peeker logo"
+                onerror="this.src='https://via.placeholder.com/48?text=P';">
+            <h2 style="font-weight: 800; font-size: 1.4rem;">peekr</h2>
+        </div>
+        <a href="#" class="nav-btn">Google Play</a>
+    </header>
+
+    <div class="hero">
+        <div class="hero-badge">✨ V2 대규모 업데이트 완료</div>
+        <h1>실시간 코인·주식 정보를<br><span class="text-gradient">더욱 우아하게, 슬쩍</span></h1>
+        <p>스마트폰과 태블릿을 가장 세련된 실시간 금융 전광판이자 디지털 사진 액자로 만들어주는 최고의 화면보호기 & 오버레이 위젯</p>
+        <img class="hero-image" src="feature_graphic_1773097875240.png" alt="Feature Graphic"
+            onerror="this.src='https://via.placeholder.com/800x400/191E2D/ffffff?text=Feature+Graphic';">
+    </div>
+
+    <div class="section" style="padding-top: 2rem;">
+        <h2 class="section-title">💡 더 강력해진 초격차 커스텀 기능</h2>
+        <div class="grid">
+            <div class="card highlight-card">
+                <span class="card-icon">🚀</span>
+                <h3 class="text-gradient">NEW 업데이트 하이라이트</h3>
+                <p>사용자 피드백을 반영하여 디테일을 한층 끌어올린 역대급 커스텀 기능들을 바로 만나보세요.</p>
+                <ul
+                    style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; list-style: none; margin-left: 0;">
+                    <li
+                        style="background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--card-border);">
+                        <strong style="color: var(--primary); display:block; margin-bottom: 0.5rem;">🖼️ 순수 사진 액자
+                            모드</strong>
+                        시계, 코인 가격, 반투명 효과까지 모두 지우고 갤러리/명화 사진만 생생하게 꽉 찬 전체화면으로 감상하세요.
+                    </li>
+                    <li
+                        style="background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--card-border);">
+                        <strong style="color: var(--primary); display:block; margin-bottom: 0.5rem;">🎚️ 위젯 전체 투명도
+                            슬라이더</strong>
+                        플로팅 위젯 전체의 불투명도를 10% 단위로 유령처럼 조절하여, 다른 작업 중 눈에 거슬리지 않게 세팅할 수 있습니다.
+                    </li>
+                    <li
+                        style="background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--card-border);">
+                        <strong style="color: var(--primary); display:block; margin-bottom: 0.5rem;">⏰ 미니멀 시계 전용
+                            모드</strong>
+                        코인 시세창이 부담스러워 지우고 싶을 땐, 다 끄고 아주 날렵한 '날짜/시간 표시 전용 위젯'으로 띄워보세요.
+                    </li>
+                    <li
+                        style="background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--card-border);">
+                        <strong style="color: var(--primary); display:block; margin-bottom: 0.5rem;">🌤️ 영구 무료 날씨
+                            연동</strong>
+                        복잡한 날씨 API 키 발급은 이제 그만! GPS 위치 활성화 한 번이면 내 지역의 날씨가 자동으로 완전 무료로 표출됩니다.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">슬쩍(peekr)만의 오리지널리티</h2>
+        <div class="grid">
+            <div class="card">
+                <span class="card-icon">📊</span>
+                <h3>강력한 플로팅 오버레이</h3>
+                <p>유튜브를 볼 때나 웹서핑 시에도 모서리에 실시간 시세를 띄워둡니다. 노치(상태바) 영역 제한을 완전히 해제해 화면 가장 높은 꼭대기까지 마음대로 이동시킬 수 있습니다.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">🕶️</span>
+                <h3>은밀한 스텔스 모드</h3>
+                <p>등락률 색상(빨강/파랑)과 복잡한 배경을 감추고 숫자만 기기 배경화면에 스며들 듯 워터마크 형태로 보여주어, 주변 사람 모르게 은밀한 가격 확인이 가능합니다.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">📱</span>
+                <h3>스마트 스크린세이버</h3>
+                <p>기기를 충전기에 꽂기만 하면 아름다운 디스플레이가 켜집니다. 일반 2분할 템플릿, 센터 템플릿, 그리고 사진 액자 전환 기능 모두 화면 보호기 앱과의 완벽한 동기화를 지원합니다.
+                </p>
+            </div>
+            <div class="card">
+                <span class="card-icon">⚡</span>
+                <h3>초고속 데이터 처리 & 보안</h3>
+                <p>바이낸스 WebSocket 기반의 1초 단위 코인 시세와 네이버 국내 주식(KOSPI, KOSDAQ) 데이터를 활용. 어떠한 회원가입이나 개인정보 서버 전송 없이 기기 내부에서
+                    100% 안전하게 동작합니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2 class="section-title">미리보기 (Gallery)</h2>
+        <p style="text-align: center; color: var(--text-muted); margin-top: -3rem; margin-bottom: 3rem;">실제 구동 화면을 확인해
+            보세요.</p>
+        <div class="gallery">
+            <!-- 동일 디렉토리(아티팩트 폴더) 내부의 이미지들을 불러옵니다 -->
+            <img src="screenshot_1_center_1773207118515.png" alt="Center UI 화면보호기"
+                onerror="this.src='https://via.placeholder.com/300x600/191E2D/ffffff?text=Screen+1';">
+            <img src="screenshot_4_photoframe_1773207158805.png" alt="Photo Frame (사진 액자)"
+                onerror="this.src='https://via.placeholder.com/300x600/191E2D/ffffff?text=Screen+2';">
+            <img src="screenshot_3_stealth_1773207145537.png" alt="스텔스 모드"
+                onerror="this.src='https://via.placeholder.com/300x600/191E2D/ffffff?text=Screen+3';">
+            <img src="screenshot_2_landscape_1773207134065.png" alt="제어 센터 및 2분할 가로 화면"
+                onerror="this.src='https://via.placeholder.com/300x600/191E2D/ffffff?text=Screen+4';">
+        </div>
+    </div>
+
+    <footer>
+        <p style="font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem;"><span class="text-gradient">peekr
+                (슬쩍)</span> — Crypto & Stock Screensaver Widget</p>
+        <p>100% On-Device, No Sign-up Required, Completely Private.</p>
+    </footer>
+</body>
+
+</html>
