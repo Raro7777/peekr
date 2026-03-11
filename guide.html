@@ -1,882 +1,428 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>슬쩍(peekr) - 사용 가이드</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
-        rel="stylesheet">
-    <style>
-        :root {
-            --gold: #FF8F00;
-            --red: #D50000;
-            --text1: #111111;
-            --text2: #555555;
-            --border: rgba(255, 255, 255, 0.5);
-            --accent: #4CAF50;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* ---------------------------------
-           PREMIUM BACKGROUND
-        ---------------------------------- */
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            color: var(--text1);
-            overflow-x: hidden;
-            background-color: #F8F9FA;
-            background-image: url('./assets/premium_bg.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            line-height: 1.7;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: -1;
-        }
-
-        /* ---------------------------------
-           SCROLL REVEAL ANIMATIONS
-        ---------------------------------- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .delay-1 {
-            transition-delay: 0.1s;
-        }
-
-        .delay-2 {
-            transition-delay: 0.2s;
-        }
-
-        .delay-3 {
-            transition-delay: 0.3s;
-        }
-
-        .delay-4 {
-            transition-delay: 0.4s;
-        }
-
-        /* ---------------------------------
-           HERO SECTION
-        ---------------------------------- */
-        .hero {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, transparent 100%);
-            padding: 100px 20px 60px;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-family: 'Noto Sans KR', sans-serif;
-            font-weight: 900;
-            font-size: clamp(2.5em, 6vw, 4em);
-            margin-bottom: 8px;
-            color: var(--text1);
-            animation: scaleIn 0.8s ease;
-        }
-
-        .hero h1 span {
-            color: var(--gold);
-        }
-
-        .hero .tagline {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: var(--text1);
-            margin-bottom: 8px;
-            animation: fadeUp 1s ease 0.3s both;
-        }
-
-        .hero .sub-tagline {
-            font-size: 1.1em;
-            font-weight: 700;
-            color: var(--red);
-            letter-spacing: 0.5px;
-            margin-bottom: 24px;
-            animation: fadeUp 1s ease 0.4s both;
-        }
-
-        .hero .badge {
-            display: inline-block;
-            background: rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            color: var(--text1);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 0.9em;
-            font-weight: 700;
-            animation: fadeUp 1s ease 0.5s both;
-            backdrop-filter: blur(10px);
-        }
-
-        /* Container */
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Section */
-        .section {
-            padding: 60px 0;
-            position: relative;
-        }
-
-        /* Subtle divider between sections instead of borders */
-        .section::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 10%;
-            width: 80%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.05), transparent);
-        }
-
-        .section:last-child::after {
-            display: none;
-        }
-
-        .section-title {
-            font-family: 'Noto Sans KR', sans-serif;
-            font-weight: 900;
-            font-size: clamp(1.6em, 4vw, 2.2em);
-            color: var(--text1);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .section-desc {
-            color: var(--text2);
-            font-size: 1em;
-            margin-bottom: 32px;
-            font-weight: 500;
-        }
-
-        /* Glassmorphism card utility */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
-            border-radius: 16px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .glass-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
-            border-color: #fff;
-        }
-
-        /* ---------------------------------
-           PROMO GALLERY
-        ---------------------------------- */
-        .promo-gallery {
-            display: flex;
-            gap: 20px;
-            overflow-x: auto;
-            padding: 20px 20px 60px 20px;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-        }
-
-        .promo-gallery::-webkit-scrollbar {
-            display: none;
-        }
-
-        .promo-img {
-            height: 480px;
-            border-radius: 24px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
-            scroll-snap-align: center;
-            flex-shrink: 0;
-            transition: transform 0.3s;
-        }
-
-        .promo-img:hover {
-            transform: scale(1.02);
-        }
-
-        @media (max-width: 600px) {
-            .promo-img {
-                height: 380px;
-            }
-        }
-
-        /* Features Grid */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 20px;
-        }
-
-        .feature-card {
-            padding: 24px;
-        }
-
-        .feature-card .icon {
-            font-size: 2em;
-            margin-bottom: 12px;
-            display: inline-block;
-            transition: transform 0.3s;
-        }
-
-        .feature-card:hover .icon {
-            transform: scale(1.1);
-        }
-
-        .feature-card h3 {
-            font-size: 1.15em;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text1);
-        }
-
-        .feature-card p {
-            color: var(--text2);
-            font-size: 0.9em;
-            line-height: 1.6;
-        }
-
-        /* Mode comparison */
-        .mode-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        @media (max-width: 600px) {
-            .mode-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .mode-card {
-            padding: 32px 24px;
-            text-align: center;
-        }
-
-        .mode-card h3 {
-            font-size: 1.2em;
-            margin-bottom: 16px;
-            font-weight: 700;
-        }
-
-        .mode-card .preview {
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            border-radius: 12px;
-            padding: 20px 16px;
-            font-family: monospace;
-            margin-bottom: 16px;
-            font-size: 1em;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .mode-card .preview .green {
-            color: #4CAF50;
-        }
-
-        .mode-card .preview .red {
-            color: #F44336;
-        }
-
-        .mode-card .preview .dim {
-            opacity: 0.4;
-        }
-
-        /* Steps */
-        .steps {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .step {
-            padding: 24px;
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-        }
-
-        .step-num {
-            background: var(--gold);
-            color: #fff;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 1em;
-            flex-shrink: 0;
-            box-shadow: 0 4px 12px rgba(255, 143, 0, 0.3);
-        }
-
-        .step-content h4 {
-            font-weight: 700;
-            font-size: 1.1em;
-            margin-bottom: 6px;
-            color: var(--text1);
-        }
-
-        .step-content p {
-            color: var(--text2);
-            font-size: 0.95em;
-        }
-
-        /* Table */
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(16px);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
-        }
-
-        .info-table th,
-        .info-table td {
-            padding: 16px 20px;
-            text-align: left;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .info-table th {
-            color: var(--text1);
-            font-weight: 700;
-            font-size: 1em;
-            background: rgba(0, 0, 0, 0.02);
-        }
-
-        .info-table td {
-            color: var(--text2);
-            font-size: 0.95em;
-            font-weight: 500;
-        }
-
-        .info-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        /* Gesture */
-        .gesture-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .gesture-item {
-            padding: 20px 24px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .gesture-item .action {
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9em;
-            font-weight: 700;
-            white-space: nowrap;
-            min-width: 90px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .gesture-item .result {
-            color: var(--text2);
-            font-size: 0.95em;
-            font-weight: 500;
-        }
-
-        /* Settings Grid */
-        .settings-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        @media (max-width: 600px) {
-            .settings-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .settings-grid .gesture-item {
-            padding: 16px;
-            gap: 16px;
-        }
-
-        /* Privacy Grid */
-        .privacy-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .privacy-card {
-            text-align: center;
-            padding: 32px 20px;
-        }
-
-        .privacy-card .icon {
-            font-size: 2.5em;
-            margin-bottom: 16px;
-        }
-
-        .privacy-card h3 {
-            font-size: 1.1em;
-            font-weight: 700;
-        }
-
-        /* Coffee Section */
-        .finale {
-            text-align: center;
-            padding: 80px 20px;
-            background: linear-gradient(0deg, rgba(255, 255, 255, 0.7) 0%, transparent 100%);
-        }
-
-        .coffee-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-            display: inline-block;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .finale h2 {
-            font-family: 'Noto Sans KR', sans-serif;
-            font-weight: 900;
-            font-size: clamp(1.6em, 4vw, 2.2em);
-            margin-bottom: 16px;
-            color: var(--text1);
-        }
-
-        .finale p {
-            color: var(--text2);
-            font-size: 1em;
-            margin-bottom: 32px;
-            font-weight: 500;
-        }
-
-        .coffee-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 18px 48px;
-            background: var(--text1);
-            color: #fff;
-            font-size: 1.2en;
-            font-weight: 700;
-            border-radius: 50px;
-            text-decoration: none;
-            letter-spacing: 1px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s, background 0.3s;
-        }
-
-        .coffee-btn:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
-            background: #000;
-        }
-
-        .coffee-sub {
-            display: block;
-            margin-top: 20px;
-            font-size: 0.85em !important;
-            color: #888 !important;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text2);
-            font-size: 0.85em;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.9);
-        }
-
-        .footer a {
-            color: var(--text1);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-            color: var(--gold);
-        }
-
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>슬쩍 Peekr — 기능 가이드</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --navy:#07090f;--navy2:#0d1117;--navy3:#111827;
+      --blue:#3b82f6;--blue-light:#60a5fa;
+      --mint:#34d399;--red:#f87171;--yellow:#fbbf24;
+      --text:#e2e8f0;--muted:#64748b;--border:#1e2d44;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Noto Sans KR',sans-serif;background:var(--navy);color:var(--text);overflow-x:hidden;line-height:1.7;}
+
+    /* NAV */
+    nav{
+      position:sticky;top:0;z-index:99;
+      padding:16px 32px;
+      display:flex;justify-content:space-between;align-items:center;
+      background:rgba(7,9,15,0.95);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-logo{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--blue-light);text-decoration:none;}
+    .nav-links{display:flex;gap:20px;align-items:center;}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;transition:color 0.2s;}
+    .nav-links a:hover{color:var(--text);}
+    .nav-cta{background:linear-gradient(135deg,var(--blue),#1d4ed8);color:#fff!important;padding:8px 20px;border-radius:8px;}
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(30px);transition:all 0.7s cubic-bezier(0.2,0.8,0.2,1);}
+    .reveal.active{opacity:1;transform:translateY(0);}
+    .d1{transition-delay:0.1s;}.d2{transition-delay:0.2s;}.d3{transition-delay:0.3s;}
+
+    /* HERO */
+    .hero{
+      padding:80px 32px 60px;
+      text-align:center;
+      background:radial-gradient(ellipse at center top,rgba(59,130,246,0.08),transparent 60%);
+      border-bottom:1px solid var(--border);
+    }
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);
+      color:var(--blue-light);padding:6px 16px;border-radius:100px;
+      font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;
+      margin-bottom:24px;
+    }
+    .hero h1{font-size:clamp(2em,5vw,3.5em);font-weight:900;margin-bottom:12px;}
+    .hero h1 span{color:var(--yellow);}
+    .hero-sub{font-size:1.1em;color:var(--muted);max-width:500px;margin:0 auto 8px;}
+    .hero-red{font-size:1em;font-weight:700;color:var(--red);}
+    .hero-badge2{
+      display:inline-block;
+      background:rgba(255,255,255,0.04);border:1px solid var(--border);
+      color:var(--muted);padding:6px 16px;border-radius:100px;
+      font-size:12px;margin-top:16px;
+    }
+
+    /* CONTAINER */
+    .container{max-width:900px;margin:0 auto;padding:0 24px;}
+
+    /* SECTION */
+    .section{padding:72px 0;border-bottom:1px solid var(--border);}
+    .section:last-child{border-bottom:none;}
+    .section-title{
+      font-size:clamp(1.5em,3.5vw,2.2em);font-weight:900;
+      margin-bottom:8px;display:flex;align-items:center;gap:12px;
+    }
+    .section-desc{color:var(--muted);font-size:0.95em;margin-bottom:32px;}
+
+    /* FEATURE CARDS */
+    .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+    .feature-card{
+      background:var(--navy2);padding:32px 28px;
+      transition:background 0.3s;
+    }
+    .feature-card:hover{background:var(--navy3);}
+    .feature-card .icon{font-size:28px;margin-bottom:12px;display:block;}
+    .feature-card h3{font-size:1em;font-weight:900;margin-bottom:8px;}
+    .feature-card p{color:var(--muted);font-size:0.88em;line-height:1.7;}
+
+    /* MODE GRID */
+    .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:40px;}
+    .mode-card{
+      background:var(--navy2);border:1px solid var(--border);
+      border-radius:16px;padding:28px;text-align:center;
+    }
+    .mode-card h3{font-size:1em;font-weight:900;margin-bottom:16px;}
+    .mode-preview{
+      background:#000;border-radius:8px;padding:16px;
+      font-family:'JetBrains Mono',monospace;font-size:13px;
+      margin-bottom:12px;border:1px solid rgba(255,255,255,0.05);
+    }
+    .mode-preview .up{color:var(--mint);}
+    .mode-preview .dn{color:var(--red);}
+    .mode-preview .dim{opacity:0.2;filter:blur(1px);}
+    .mode-note{color:var(--muted);font-size:0.85em;}
+
+    /* GESTURE LIST */
+    .gesture-list{display:flex;flex-direction:column;gap:12px;}
+    .gesture-item{
+      background:var(--navy2);border:1px solid var(--border);
+      border-radius:12px;padding:16px 20px;
+      display:flex;gap:16px;align-items:center;
+    }
+    .gesture-action{
+      font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+      background:rgba(59,130,246,0.1);color:var(--blue-light);
+      padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;
+    }
+    .gesture-result{color:var(--text);font-size:0.9em;}
+
+    /* TABLE */
+    .info-table{width:100%;border-collapse:collapse;}
+    .info-table th,.info-table td{
+      padding:14px 20px;text-align:left;
+      border-bottom:1px solid var(--border);
+    }
+    .info-table th{
+      font-family:'JetBrains Mono',monospace;font-size:11px;
+      letter-spacing:2px;color:var(--muted);
+      background:var(--navy2);
+    }
+    .info-table td{font-size:0.9em;}
+    .info-table tr:last-child td{border-bottom:none;}
+    .info-table tr:hover td{background:rgba(255,255,255,0.02);}
+    .info-table strong{color:var(--mint);}
+
+    /* STEPS */
+    .steps{display:flex;flex-direction:column;gap:12px;margin-top:24px;}
+    .step{
+      background:var(--navy2);border:1px solid var(--border);
+      border-radius:12px;padding:20px 24px;
+      display:flex;gap:20px;align-items:flex-start;
+    }
+    .step-num{
+      width:32px;height:32px;border-radius:50%;
+      background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);
+      color:var(--blue-light);font-family:'JetBrains Mono',monospace;
+      font-size:13px;font-weight:700;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    }
+    .step-content h4{font-size:1em;font-weight:900;margin-bottom:4px;}
+    .step-content p{font-size:0.88em;color:var(--muted);}
+
+    /* SETTINGS GRID */
+    .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+    .setting-item{
+      background:var(--navy2);border:1px solid var(--border);
+      border-radius:10px;padding:14px 16px;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+    }
+    .setting-key{font-size:0.88em;color:var(--text);}
+    .setting-val{
+      font-family:'JetBrains Mono',monospace;font-size:11px;
+      color:var(--muted);text-align:right;
+    }
+
+    /* PRIVACY CARDS */
+    .privacy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+    .privacy-card{
+      background:var(--navy2);border:1px solid var(--border);
+      border-radius:16px;padding:32px 24px;text-align:center;
+    }
+    .privacy-card .icon{font-size:32px;margin-bottom:12px;display:block;}
+    .privacy-card h3{font-size:0.95em;font-weight:900;}
+
+    /* FINALE */
+    .finale{
+      text-align:center;padding:100px 24px;
+      background:radial-gradient(ellipse at center,rgba(59,130,246,0.06),transparent 60%);
+    }
+    .coffee-icon{font-size:48px;margin-bottom:20px;display:block;}
+    .finale h2{font-size:clamp(1.5em,4vw,2.5em);font-weight:900;margin-bottom:16px;}
+    .finale p{color:var(--muted);margin-bottom:32px;line-height:1.8;}
+    .coffee-btn{
+      display:inline-block;
+      background:linear-gradient(135deg,#fbbf24,#d97706);
+      color:#1a1a1a;font-weight:900;font-size:1em;
+      padding:16px 40px;border-radius:12px;text-decoration:none;
+      transition:all 0.3s;box-shadow:0 0 30px rgba(251,191,36,0.2);
+    }
+    .coffee-btn:hover{transform:translateY(-3px);box-shadow:0 0 50px rgba(251,191,36,0.4);}
+    .coffee-sub{display:block;color:var(--muted);font-size:0.85em;margin-top:12px;}
+
+    /* FOOTER */
+    footer{background:var(--navy2);border-top:1px solid var(--border);padding:40px 32px;text-align:center;}
+    .footer-logo{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--blue-light);margin-bottom:16px;display:block;}
+    .footer-links{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;}
+    .footer-links a{color:var(--muted);text-decoration:none;font-size:13px;}
+    .footer-links a:hover{color:var(--text);}
+    .footer-copy{font-size:12px;color:var(--border);}
+
+    /* BTN */
+    .btn-primary{
+      display:inline-flex;align-items:center;gap:8px;
+      background:linear-gradient(135deg,var(--blue),#1d4ed8);
+      color:#fff;font-size:1em;font-weight:700;
+      padding:14px 36px;border-radius:12px;text-decoration:none;
+      box-shadow:0 0 30px rgba(59,130,246,0.2);transition:all 0.3s;
+    }
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(59,130,246,0.4);}
+
+    @media(max-width:768px){
+      nav .nav-links{display:none;}
+      .mode-grid{grid-template-columns:1fr;}
+      .privacy-grid{grid-template-columns:1fr;}
+      .settings-grid{grid-template-columns:1fr;}
+    }
+  </style>
 </head>
-
 <body>
 
-    <!-- Hero -->
-    <div class="hero">
-        <div class="hero-content">
-            <h1>슬쩍 <span>(peekr)</span></h1>
-            <p class="tagline">실시간 주식·코인 가격을 슬쩍 확인하세요</p>
-            <p class="sub-tagline">K직장인들의 확실한 투자 파트너 !!!</p>
-            <span class="badge">기능 가이드 문서</span>
+<!-- NAV -->
+<nav>
+  <a href="./index.html" class="nav-logo">슬쩍 · Peekr</a>
+  <div class="nav-links">
+    <a href="./ad.html">광고 페이지</a>
+    <a href="./privacy.html">개인정보</a>
+    <a href="https://open.kakao.com/o/g3FQiIki" target="_blank">커뮤니티</a>
+    <a href="https://forms.gle/aGg5HdH7Y1Ut49Mr8" target="_blank" class="nav-cta">테스터 신청 →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📖 GUIDE</div>
+  <h1>슬쩍 <span>사용 가이드</span></h1>
+  <p class="hero-sub">실시간 주식·코인 가격을 슬쩍 확인하세요</p>
+  <p class="hero-red">K직장인들의 확실한 투자 파트너</p>
+  <span class="hero-badge2">Android App · 무료 · v1.0</span>
+</div>
+
+<!-- 주요 기능 -->
+<div class="section">
+  <div class="container">
+    <h2 class="section-title reveal"><span>✨</span> 주요 기능</h2>
+    <p class="section-desc reveal d1">슬쩍이 제공하는 6가지 핵심 기능</p>
+    <div class="features reveal d2">
+      <div class="feature-card">
+        <span class="icon">🖥️</span>
+        <h3>화면보호기</h3>
+        <p>충전 중 자동으로 활성화되어 실시간 주식·코인 가격을 아름다운 레이아웃으로 표시합니다.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">📌</span>
+        <h3>오버레이 위젯</h3>
+        <p>다른 앱 위에 항상 표시되는 플로팅 가격 바. 어떤 앱을 사용하면서도 실시간 가격 확인.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🕶️</span>
+        <h3>스텔스 모드</h3>
+        <p>숫자만 워터마크처럼 표시. 주변 사람들이 눈치채지 못하게 가격을 확인할 수 있습니다.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">⚡</span>
+        <h3>실시간 시세</h3>
+        <p>네이버 금융 API로 국내 주식, Binance WebSocket으로 암호화폐 가격을 실시간 수신.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🖼️</span>
+        <h3>사진 배경</h3>
+        <p>로컬 사진 폴더, 온라인 이미지 등 다양한 소스로 화면보호기 배경을 꾸밀 수 있습니다.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🎨</span>
+        <h3>커스터마이징</h3>
+        <p>글꼴 크기, 색상, 투명도, 위치 등 세밀한 설정으로 나만의 화면을 만드세요.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 화면보호기 템플릿 -->
+<div class="section">
+  <div class="container">
+    <h2 class="section-title reveal"><span>🖥️</span> 화면보호기 템플릿</h2>
+    <p class="section-desc reveal d1">3가지 레이아웃 중 취향에 맞게 선택하세요</p>
+    <div class="features reveal d2">
+      <div class="feature-card">
+        <span class="icon">🎯</span>
+        <h3>센터 모드</h3>
+        <p>화면 중앙에 시계와 가격 정보를 집중 배치. 깔끔하고 심플한 디자인.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">📐</span>
+        <h3>분할 모드</h3>
+        <p>화면을 분할하여 시계, 날씨, 가격 정보를 각 영역에 배치. 정보량이 많을 때 추천.</p>
+      </div>
+      <div class="feature-card">
+        <span class="icon">🖼️</span>
+        <h3>포토프레임 모드</h3>
+        <p>사진 배경 위에 시계와 가격을 오버레이 표시. 디지털 액자처럼 활용 가능.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 오버레이 위젯 -->
+<div class="section">
+  <div class="container">
+    <h2 class="section-title reveal"><span>📌</span> 오버레이 위젯</h2>
+    <p class="section-desc reveal d1">다른 앱 위에 항상 떠 있는 실시간 가격 바</p>
+    <div class="mode-grid reveal d2">
+      <div class="mode-card">
+        <h3>👁 일반 모드</h3>
+        <div class="mode-preview">
+          삼전 <span class="up">72,500 ▲2.1%</span> · BTC <span class="dn">$65,544 ▼0.8%</span>
         </div>
-    </div>
-
-    <!-- 실제 적용 화면 -->
-    <div class="divider reveal" style="padding:40px 20px 0;">
-        <p
-            style="text-align:center;font-family:'Noto Sans KR',sans-serif;font-weight:900;color:var(--text1);font-size:1.5em;margin-bottom:16px;">
-            실제 적용 화면</p>
-    </div>
-
-    <div class="scene">
-        <div class="promo-gallery">
-            <img src="./assets/promo_1_split.png" alt="화면보호기 분할 화면" class="promo-img reveal delay-1">
-            <img src="./assets/promo_2_stealth.png" alt="스텔스 모드 오버레이" class="promo-img reveal delay-2">
-            <img src="./assets/promo_3_photo.png" alt="사진 배경 화면보호기" class="promo-img reveal delay-3">
+        <p class="mode-note">이름 + 가격 + 등락률<br/>반투명 검정 배경</p>
+      </div>
+      <div class="mode-card">
+        <h3>🕶 스텔스 모드</h3>
+        <div class="mode-preview">
+          <span class="dim">72500 &nbsp; 65544 &nbsp; 173500</span>
         </div>
+        <p class="mode-note">숫자만 워터마크 스타일<br/>극강의 투명도로 위장</p>
+      </div>
     </div>
-
-    <!-- 주요 기능 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title reveal"><span class="emoji">✨</span> 주요 기능</h2>
-            <p class="section-desc reveal delay-1">슬쩍이 제공하는 핵심 기능들을 소개합니다</p>
-            <div class="features">
-                <div class="feature-card glass-card reveal delay-1">
-                    <div class="icon">🖥️</div>
-                    <h3>화면보호기</h3>
-                    <p>충전 중 자동으로 활성화되어 실시간 주식·코인 가격을 아름다운 레이아웃으로 표시합니다.</p>
-                </div>
-                <div class="feature-card glass-card reveal delay-2">
-                    <div class="icon">📌</div>
-                    <h3>오버레이 위젯</h3>
-                    <p>다른 앱 위에 항상 표시되는 플로팅 가격 바. 어떤 앱을 사용하면서도 실시간 가격을 확인하세요.</p>
-                </div>
-                <div class="feature-card glass-card reveal delay-3">
-                    <div class="icon">🕶️</div>
-                    <h3>스텔스 모드</h3>
-                    <p>숫자만 워터마크처럼 표시. 주변 사람들이 눈치채지 못하게 가격을 확인할 수 있습니다.</p>
-                </div>
-                <div class="feature-card glass-card reveal delay-1">
-                    <div class="icon">📊</div>
-                    <h3>실시간 시세</h3>
-                    <p>네이버 금융 API로 국내 주식, Binance WebSocket으로 암호화폐 가격을 실시간으로 수신합니다.</p>
-                </div>
-                <div class="feature-card glass-card reveal delay-2">
-                    <div class="icon">🖼️</div>
-                    <h3>사진 배경</h3>
-                    <p>로컬 사진 폴더, 온라인 이미지 등 다양한 소스로 화면보호기 배경을 꾸밀 수 있습니다.</p>
-                </div>
-                <div class="feature-card glass-card reveal delay-3">
-                    <div class="icon">🎨</div>
-                    <h3>자유로운 커스터마이징</h3>
-                    <p>글꼴 크기, 색상, 투명도, 위치 등 세밀한 설정으로 나만의 화면을 만드세요.</p>
-                </div>
-            </div>
-        </div>
+    <h3 class="reveal" style="font-size:1.2em;font-weight:900;margin-bottom:16px;">제스처 조작</h3>
+    <div class="gesture-list reveal d1">
+      <div class="gesture-item">
+        <span class="gesture-action">탭</span>
+        <span class="gesture-result">반응 없음 — 실수로 터치해도 조작되지 않습니다</span>
+      </div>
+      <div class="gesture-item">
+        <span class="gesture-action">길게 누르기</span>
+        <span class="gesture-result">팝업 메뉴 표시 — 위치 이동 / 모드 전환 / 설정 / 위젯 닫기</span>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- 화면보호기 템플릿 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title reveal"><span class="emoji">🖥️</span> 화면보호기 템플릿</h2>
-            <p class="section-desc reveal delay-1">3가지 레이아웃 중 취향에 맞게 선택하세요</p>
-            <div class="features">
-                <div class="feature-card glass-card reveal delay-1">
-                    <div class="icon">🎯</div>
-                    <h3>센터 모드</h3>
-                    <p>화면 중앙에 시계와 가격 정보를 집중 배치. 깔끔하고 심플한 디자인.</p>
-                </div>
-                <div class="feature-card glass-card reveal delay-2">
-                    <div class="icon">📐</div>
-                    <h3>분할 모드</h3>
-                    <p>화면을 분할하여 시계, 날씨, 가격 정보를 각 영역에 배치. 정보량이 많을 때 추천.</p>
-                </div>
-                <div class="feature-card glass-card reveal delay-3">
-                    <div class="icon">🖼️</div>
-                    <h3>포토프레임 모드</h3>
-                    <p>사진 배경 위에 시계와 가격을 오버레이 표시. 디지털 액자처럼 활용 가능.</p>
-                </div>
-            </div>
-        </div>
+<!-- 지원 시세 -->
+<div class="section">
+  <div class="container">
+    <h2 class="section-title reveal"><span>💰</span> 지원 시세</h2>
+    <p class="section-desc reveal d1">국내 주식과 암호화폐를 동시에 확인할 수 있습니다</p>
+    <div class="reveal d2" style="border:1px solid var(--border);border-radius:16px;overflow:hidden;">
+      <table class="info-table">
+        <tr><th>종류</th><th>데이터 소스</th><th>갱신 주기</th></tr>
+        <tr><td>암호화폐 (BTC, ETH, SOL 등)</td><td>Binance WebSocket API</td><td><strong>실시간 (0.1초)</strong></td></tr>
+        <tr><td>코스피 / 코스닥 지수</td><td>네이버 금융 API</td><td>1분 간격</td></tr>
+        <tr><td>국내 개별 주식 (삼성전자 등)</td><td>네이버 금융 API</td><td>1분 간격</td></tr>
+      </table>
     </div>
-
-    <!-- 오버레이 위젯 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title reveal"><span class="emoji">📌</span> 오버레이 위젯</h2>
-            <p class="section-desc reveal delay-1">다른 앱 위에 항상 떠 있는 실시간 가격 바</p>
-
-            <div class="mode-grid">
-                <div class="mode-card glass-card reveal delay-1">
-                    <h3>👁 일반 모드</h3>
-                    <div class="preview">
-                        삼전 <span class="green">72,500 ▲2.1%</span> · BTC <span class="red">$65,544 ▼0.8%</span>
-                    </div>
-                    <p style="color:var(--text2);font-size:0.9em;font-weight:500;">이름 + 가격 + 등락률<br>반투명 검정 배경</p>
-                </div>
-                <div class="mode-card glass-card reveal delay-2">
-                    <h3>🕶 스텔스 모드</h3>
-                    <div class="preview">
-                        <span class="dim">72500 65544 173500</span>
-                    </div>
-                    <p style="color:var(--text2);font-size:0.9em;font-weight:500;">숫자만 워터마크 스타일<br>극강의 투명도로 위장</p>
-                </div>
-            </div>
-
-            <h3 class="reveal"
-                style="font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:1.4em;margin-top:40px;margin-bottom:16px;color:var(--text1);">
-                제스처 조작</h3>
-            <div class="gesture-list">
-                <div class="gesture-item glass-card reveal delay-1">
-                    <span class="action">탭</span>
-                    <span class="result">반응 없음 — 실수로 터치해도 조작되지 않습니다</span>
-                </div>
-                <div class="gesture-item glass-card reveal delay-2">
-                    <span class="action">길게 누르기</span>
-                    <span class="result">팝업 메뉴 표시 — 위치 이동 / 모드 전환 / 설정 / 위젯 닫기</span>
-                </div>
-            </div>
-        </div>
+    <h3 class="reveal" style="font-size:1.2em;font-weight:900;margin-top:40px;margin-bottom:4px;">종목 추가 방법</h3>
+    <div class="steps reveal d1">
+      <div class="step">
+        <span class="step-num">1</span>
+        <div class="step-content"><h4>암호화폐</h4><p>Binance 티커를 직접 입력 (예: BTCUSDT, SOLUSDT)</p></div>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <div class="step-content"><h4>국내 주식</h4><p>종목 이름으로 검색 (예: "삼성전자" → 자동으로 005930 변환)</p></div>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <div class="step-content"><h4>순서 변경</h4><p>우측의 ▲▼ 화살표 버튼으로 표시 순서를 자유롭게 리오더링</p></div>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- 지원 시세 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title reveal"><span class="emoji">💰</span> 지원 시세</h2>
-            <p class="section-desc reveal delay-1">국내 주식과 암호화폐를 동시에 확인할 수 있습니다</p>
-            <div class="reveal delay-2">
-                <table class="info-table">
-                    <tr>
-                        <th>종류</th>
-                        <th>데이터 소스</th>
-                        <th>갱신 주기</th>
-                    </tr>
-                    <tr>
-                        <td>암호화폐 (BTC, ETH, SOL 등)</td>
-                        <td>Binance WebSocket API</td>
-                        <td><strong>실시간 (0.1초)</strong></td>
-                    </tr>
-                    <tr>
-                        <td>코스피 / 코스닥 지수</td>
-                        <td>네이버 금융 API</td>
-                        <td>1분 간격</td>
-                    </tr>
-                    <tr>
-                        <td>국내 개별 주식 (삼성전자 등)</td>
-                        <td>네이버 금융 API</td>
-                        <td>1분 간격</td>
-                    </tr>
-                </table>
-            </div>
-
-            <h3 class="reveal"
-                style="font-family:'Noto Sans KR',sans-serif;font-weight:700;font-size:1.4em;margin-top:40px;margin-bottom:16px;color:var(--text1);">
-                종목 추가 방법</h3>
-            <div class="steps">
-                <div class="step glass-card reveal delay-1">
-                    <span class="step-num">1</span>
-                    <div class="step-content">
-                        <h4>암호화폐</h4>
-                        <p>Binance 티커를 직접 입력 (예: BTCUSDT, SOLUSDT)</p>
-                    </div>
-                </div>
-                <div class="step glass-card reveal delay-2">
-                    <span class="step-num">2</span>
-                    <div class="step-content">
-                        <h4>국내 주식</h4>
-                        <p>종목 이름으로 검색 (예: "삼성전자" → 자동으로 005930 변환)</p>
-                    </div>
-                </div>
-                <div class="step glass-card reveal delay-3">
-                    <span class="step-num">3</span>
-                    <div class="step-content">
-                        <h4>순서 변경</h4>
-                        <p>우측의 ▲▼ 화살표 버튼으로 표시 순서를 자유롭게 리오더링</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- 설정 옵션 -->
+<div class="section">
+  <div class="container">
+    <h2 class="section-title reveal"><span>⚙️</span> 설정 옵션</h2>
+    <p class="section-desc reveal d1">나만의 취향을 반영하는 세밀한 커스터마이징</p>
+    <div class="settings-grid reveal d2">
+      <div class="setting-item"><span class="setting-key">글꼴 크기</span><span class="setting-val">슬라이더 조절</span></div>
+      <div class="setting-item"><span class="setting-key">정보 바</span><span class="setting-val">상단 / 하단</span></div>
+      <div class="setting-item"><span class="setting-key">배경 색상</span><span class="setting-val">컬러 피커</span></div>
+      <div class="setting-item"><span class="setting-key">글자 색상</span><span class="setting-val">컬러 피커</span></div>
+      <div class="setting-item"><span class="setting-key">초 표시</span><span class="setting-val">ON / OFF</span></div>
+      <div class="setting-item"><span class="setting-key">강조 색상</span><span class="setting-val">컬러 피커</span></div>
+      <div class="setting-item"><span class="setting-key">사진 소스</span><span class="setting-val">로컬 / 온라인</span></div>
+      <div class="setting-item"><span class="setting-key">사진 전환</span><span class="setting-val">3초 / 10초 / 60초</span></div>
+      <div class="setting-item"><span class="setting-key">프리셋</span><span class="setting-val">📱 폰 / 💻 태블릿</span></div>
+      <div class="setting-item"><span class="setting-key">화면 방향</span><span class="setting-val">자동 / 세로 / 가로</span></div>
     </div>
+  </div>
+</div>
 
-    <!-- 설정 옵션 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title reveal"><span class="emoji">⚙️</span> 설정 옵션</h2>
-            <p class="section-desc reveal delay-1">나만의 취향을 반영하는 세밀한 커스터마이징</p>
-            <div class="settings-grid">
-                <div class="gesture-item glass-card reveal delay-1"><span class="action">글꼴 크기</span><span
-                        class="result">슬라이더 조절</span></div>
-                <div class="gesture-item glass-card reveal delay-2"><span class="action">정보 바</span><span
-                        class="result">상단 / 하단 배치</span></div>
-                <div class="gesture-item glass-card reveal delay-1"><span class="action">배경 색상</span><span
-                        class="result">컬러 피커 선택</span></div>
-                <div class="gesture-item glass-card reveal delay-2"><span class="action">글자 색상</span><span
-                        class="result">컬러 피커 선택</span></div>
-                <div class="gesture-item glass-card reveal delay-1"><span class="action">초 표시</span><span
-                        class="result">ON / OFF</span></div>
-                <div class="gesture-item glass-card reveal delay-2"><span class="action">강조 색상</span><span
-                        class="result">컬러 피커 선택</span></div>
-                <div class="gesture-item glass-card reveal delay-1"><span class="action">사진 소스</span><span
-                        class="result">로컬 폴더 / 온라인</span></div>
-                <div class="gesture-item glass-card reveal delay-2"><span class="action">사진 전환</span><span
-                        class="result">3초 / 10초 / 60초</span></div>
-                <div class="gesture-item glass-card reveal delay-1"><span class="action">프리셋</span><span
-                        class="result">📱 모바일 / 💻 태블릿</span></div>
-                <div class="gesture-item glass-card reveal delay-2"><span class="action">화면 방향</span><span
-                        class="result">자동 / 세로 / 가로 고정</span></div>
-            </div>
-        </div>
+<!-- 개인정보 -->
+<div class="section">
+  <div class="container">
+    <h2 class="section-title reveal"><span>🔒</span> 개인정보 보호</h2>
+    <p class="section-desc reveal d1">슬쩍은 사용자의 뒤를 캐지 않습니다. 완벽하게 안전합니다.</p>
+    <div class="privacy-grid reveal d2">
+      <div class="privacy-card"><span class="icon">🚫</span><h3>회원가입 없음</h3></div>
+      <div class="privacy-card"><span class="icon">📱</span><h3>기기 내부 저장만</h3></div>
+      <div class="privacy-card"><span class="icon">🔐</span><h3>서버 전송 없음</h3></div>
     </div>
+  </div>
+</div>
 
-    <!-- 개인정보 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title reveal"><span class="emoji">🔒</span> 개인정보 보호</h2>
-            <p class="section-desc reveal delay-1">슬쩍은 사용자의 뒤를 캐지 않습니다. 완벽하게 안전합니다.</p>
-            <div class="privacy-grid">
-                <div class="privacy-card glass-card reveal delay-1">
-                    <div class="icon">🚫</div>
-                    <h3>회원가입 없음</h3>
-                </div>
-                <div class="privacy-card glass-card reveal delay-2">
-                    <div class="icon">📱</div>
-                    <h3>기기 내부 저장만</h3>
-                </div>
-                <div class="privacy-card glass-card reveal delay-3">
-                    <div class="icon">🔐</div>
-                    <h3>서버 전송 없음</h3>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- FINALE -->
+<div class="finale">
+  <span class="coffee-icon">☕</span>
+  <h2 class="reveal">개발자에게 커피 한 잔 사주기</h2>
+  <p class="reveal d1">슬쩍이 유용하셨다면, 커피 한 잔으로 자유롭게 응원해 주세요!<br/>여러분의 후원은 서버 유지비용이 아닌 개발자의 야근 식대가 됩니다 ☕</p>
+  <a href="https://qr.kakaopay.com/Ej8ZV7ZuB" target="_blank" class="coffee-btn reveal d2">☕ 카카오페이로 쿨하게 쏘기</a>
+  <span class="coffee-sub reveal d3">카카오페이 송금 QR로 연결됩니다 🙏</span>
+</div>
 
-    <!-- 후원 -->
-    <div class="finale reveal">
-        <div class="coffee-icon">☕</div>
-        <h2>개발자에게 커피 한 잔 사주기</h2>
-        <p>슬쩍이 유용하셨다면, 커피 한 잔으로 자유롭게 응원해 주세요!<br>
-            여러분의 후원은 서버 유지비용이 아닌 개발자의 야근 식대가 됩니다 ☕️</p>
-        <a href="https://qr.kakaopay.com/Ej8ZV7ZuB" target="_blank" class="coffee-btn reveal delay-1">
-            ☕ 카카오페이로 쿨하게 쏘기
-        </a>
-        <span class="coffee-sub reveal delay-2">카카오페이 송금 QR로 연결됩니다 🙏</span>
-    </div>
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">슬쩍 · Peekr</span>
+  <div class="footer-links">
+    <a href="./privacy.html">개인정보 처리방침</a>
+    <a href="./ad.html">광고 페이지</a>
+    <a href="mailto:s2001352@gmail.com">📧 s2001352@gmail.com</a>
+  </div>
+  <p class="footer-copy">© 2026 peekr. All rights reserved.</p>
+</footer>
 
-    <!-- Footer -->
-    <div class="footer">
-        <p style="font-weight:700;margin-bottom:8px;font-size:1.1em;color:var(--text1);">슬쩍(peekr) · K직장인들의 확실한 투자 파트너
-        </p>
-        <p style="margin-top:8px;"><a href="./privacy.html">개인정보 처리방침</a> &nbsp;·&nbsp; 📧 s2001352@gmail.com</p>
-        <p style="margin-top:16px;font-size:0.95em;">© 2026 peekr. All rights reserved.</p>
-    </div>
-
-    <!-- JS for Scroll Animations -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px 0px -50px 0px',
-                threshold: 0.1
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.reveal').forEach((el) => {
-                observer.observe(el);
-            });
-        });
-    </script>
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('active');});},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
 </body>
-
 </html>

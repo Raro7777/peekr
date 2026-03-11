@@ -1,641 +1,285 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>슬쩍(peekr) - 사용 가이드</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
-        rel="stylesheet">
-    <style>
-        :root {
-            --bg: #0D1B2A;
-            --bg2: #1B2838;
-            --accent: #4CAF50;
-            --accent2: #81C784;
-            --text: #E0E0E0;
-            --text2: #9E9E9E;
-            --card: #1E2D3D;
-            --red: #FF5252;
-        }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>슬쩍 Peekr — 실시간 주식·코인 화면보호기</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --navy:#07090f;--navy2:#0d1117;--navy3:#111827;
+      --blue:#3b82f6;--blue-light:#60a5fa;
+      --mint:#34d399;--red:#f87171;--yellow:#fbbf24;
+      --text:#e2e8f0;--muted:#64748b;--border:#1e2d44;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Noto Sans KR',sans-serif;background:var(--navy);color:var(--text);overflow-x:hidden;line-height:1.7;}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    /* TICKER */
+    .ticker{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(7,9,15,0.95);border-bottom:1px solid var(--border);overflow:hidden;height:36px;backdrop-filter:blur(12px);}
+    .ticker-track{display:flex;align-items:center;height:100%;animation:ticker 30s linear infinite;white-space:nowrap;}
+    .ticker-item{font-family:'JetBrains Mono',monospace;font-size:11px;padding:0 24px;display:flex;gap:8px;align-items:center;}
+    .ticker-sym{color:var(--muted);}
+    .up{color:var(--mint);}
+    .dn{color:var(--red);}
+    @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-        }
+    /* NAV */
+    nav{position:fixed;top:36px;left:0;right:0;z-index:99;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;background:rgba(7,9,15,0.85);backdrop-filter:blur(16px);border-bottom:1px solid rgba(30,45,68,0.5);}
+    .nav-logo{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--blue-light);text-decoration:none;}
+    .nav-links{display:flex;gap:20px;align-items:center;}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;transition:color 0.2s;}
+    .nav-links a:hover{color:var(--text);}
+    .nav-cta{background:linear-gradient(135deg,var(--blue),#1d4ed8);color:#fff!important;padding:8px 20px;border-radius:8px;}
 
-        /* Hero */
-        .hero {
-            background: linear-gradient(135deg, var(--bg) 0%, #1A237E 50%, var(--bg) 100%);
-            text-align: center;
-            padding: 48px 20px 36px;
-            position: relative;
-            overflow: hidden;
-        }
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(30px);transition:all 0.7s cubic-bezier(0.2,0.8,0.2,1);}
+    .reveal.active{opacity:1;transform:translateY(0);}
+    .d1{transition-delay:0.1s;}.d2{transition-delay:0.2s;}.d3{transition-delay:0.3s;}
 
-        .hero::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 50%, rgba(76, 175, 80, 0.15) 0%, transparent 60%);
-        }
+    /* HERO */
+    .hero{
+      min-height:100vh;display:flex;flex-direction:column;
+      justify-content:center;align-items:center;text-align:center;
+      padding:120px 24px 80px;position:relative;overflow:hidden;
+      background:radial-gradient(ellipse at 30% 50%,rgba(59,130,246,0.07),transparent 60%),
+                 radial-gradient(ellipse at 70% 50%,rgba(52,211,153,0.04),transparent 60%);
+    }
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);
+      color:var(--blue-light);padding:6px 16px;border-radius:100px;
+      font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;
+      margin-bottom:32px;animation:fadeDown 0.8s ease both;
+    }
+    .pulse{width:6px;height:6px;border-radius:50%;background:var(--mint);animation:pulse 1.5s ease-in-out infinite;}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)}}
 
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
+    .hero h1{font-size:clamp(2.2em,7vw,5em);font-weight:900;line-height:1.15;margin-bottom:12px;animation:scaleIn 0.8s ease both 0.2s;}
+    .hero h1 .blue{color:var(--blue-light);}
+    .hero-tagline{font-size:clamp(1em,2.5vw,1.4em);font-weight:700;color:var(--text);margin-bottom:4px;animation:fadeUp 0.8s ease both 0.3s;}
+    .hero-sub{font-size:clamp(0.9em,2vw,1.1em);color:var(--muted);margin-bottom:48px;animation:fadeUp 0.8s ease both 0.4s;}
+    .hero-btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;animation:fadeUp 0.8s ease both 0.6s;}
 
-        .hero h1 {
-            font-size: 2.5em;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
+    .btn-primary{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--blue),#1d4ed8);color:#fff;font-size:1em;font-weight:700;padding:16px 40px;border-radius:12px;text-decoration:none;box-shadow:0 0 40px rgba(59,130,246,0.3);transition:all 0.3s;}
+    .btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(59,130,246,0.5);}
+    .btn-ghost{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);color:var(--text);font-size:1em;font-weight:700;padding:16px 40px;border-radius:12px;text-decoration:none;transition:all 0.3s;}
+    .btn-ghost:hover{border-color:var(--blue-light);color:var(--blue-light);}
 
-        .hero h1 span {
-            color: var(--accent);
-        }
+    /* FEATURE GRID */
+    .features-section{padding:100px 24px;}
+    .container{max-width:1000px;margin:0 auto;}
+    .section-label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--blue-light);opacity:0.7;margin-bottom:16px;display:block;}
+    .section-title{font-size:clamp(1.8em,4vw,2.8em);font-weight:900;margin-bottom:48px;}
 
-        .hero .tagline {
-            font-size: 1.3em;
-            font-weight: 500;
-            color: #fff;
-            margin-bottom: 4px;
-        }
+    .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;border:1px solid var(--border);border-radius:20px;overflow:hidden;}
+    .feat-card{background:var(--navy2);padding:36px 28px;transition:background 0.3s;}
+    .feat-card:hover{background:var(--navy3);}
+    .feat-icon{font-size:28px;margin-bottom:14px;display:block;}
+    .feat-num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--border);margin-bottom:14px;display:block;}
+    .feat-card h3{font-size:1em;font-weight:900;margin-bottom:10px;}
+    .feat-card p{color:var(--muted);font-size:0.88em;line-height:1.8;}
 
-        .hero .sub-tagline {
-            font-size: 1em;
-            font-weight: 700;
-            color: #FFDD00;
-            letter-spacing: 1px;
-        }
+    /* COMMUNITY */
+    .community-section{padding:80px 24px;border-top:1px solid var(--border);}
+    .community-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px;}
+    .community-card{
+      background:var(--navy2);border:1px solid var(--border);
+      border-radius:20px;padding:36px 32px;
+      text-decoration:none;color:var(--text);
+      transition:all 0.3s;display:block;
+    }
+    .community-card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:0 0 40px rgba(59,130,246,0.1);}
+    .community-card.kakao{border-left:3px solid #FEE500;}
+    .community-card.telegram{border-left:3px solid #2CA5E0;}
+    .comm-icon{font-size:36px;margin-bottom:16px;display:block;}
+    .comm-name{font-size:1.2em;font-weight:900;margin-bottom:8px;}
+    .comm-desc{color:var(--muted);font-size:0.9em;line-height:1.7;}
+    .comm-arrow{display:block;margin-top:20px;color:var(--muted);font-size:0.85em;}
 
-        .hero .subtitle {
-            font-size: 1.2em;
-            color: var(--text2);
-            font-weight: 300;
-        }
+    /* TESTER */
+    .tester-section{
+      padding:100px 24px;
+      text-align:center;
+      background:radial-gradient(ellipse at center,rgba(59,130,246,0.08),transparent 60%);
+      border-top:1px solid var(--border);
+    }
+    .tester-title{font-size:clamp(2em,5vw,3.5em);font-weight:900;line-height:1.3;margin-bottom:16px;}
+    .tester-title span{color:var(--blue-light);}
+    .tester-desc{color:var(--muted);font-size:1em;margin-bottom:40px;line-height:1.8;}
+    .btn-tester{
+      display:inline-flex;align-items:center;gap:8px;
+      background:linear-gradient(135deg,var(--mint),#059669);
+      color:#fff;font-size:1.1em;font-weight:900;
+      padding:18px 48px;border-radius:12px;text-decoration:none;
+      box-shadow:0 0 40px rgba(52,211,153,0.2);transition:all 0.3s;
+    }
+    .btn-tester:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(52,211,153,0.4);}
 
-        .hero .badge {
-            display: inline-block;
-            background: var(--accent);
-            color: #000;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 500;
-            margin-top: 16px;
-        }
+    /* FOOTER */
+    footer{background:var(--navy2);border-top:1px solid var(--border);padding:40px 32px;text-align:center;}
+    .footer-logo{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--blue-light);margin-bottom:16px;display:block;}
+    .footer-links{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:16px;}
+    .footer-links a{color:var(--muted);text-decoration:none;font-size:13px;}
+    .footer-links a:hover{color:var(--text);}
+    .footer-copy{font-size:12px;color:var(--border);}
 
-        /* Container */
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    @keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes scaleIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
 
-        /* Section */
-        .section {
-            padding: 32px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .section:last-child {
-            border-bottom: none;
-        }
-
-        .section-title {
-            font-size: 1.4em;
-            font-weight: 700;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-title .emoji {
-            font-size: 1em;
-        }
-
-        .section-desc {
-            color: var(--text2);
-            font-size: 0.9em;
-            margin-bottom: 16px;
-        }
-
-        /* Feature Cards */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 12px;
-        }
-
-        .feature-card {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 18px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-        }
-
-        .feature-card .icon {
-            font-size: 1.5em;
-            margin-bottom: 6px;
-        }
-
-        .feature-card h3 {
-            font-size: 1em;
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        .feature-card p {
-            color: var(--text2);
-            font-size: 0.85em;
-            line-height: 1.5;
-        }
-
-        /* Mode comparison */
-        .mode-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 600px) {
-            .mode-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .mode-card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-        }
-
-        .mode-card h3 {
-            font-size: 1.1em;
-            margin-bottom: 12px;
-        }
-
-        .mode-card .preview {
-            background: #000;
-            border-radius: 8px;
-            padding: 16px;
-            font-family: monospace;
-            margin-bottom: 12px;
-            font-size: 0.95em;
-        }
-
-        .mode-card .preview .green {
-            color: var(--accent);
-        }
-
-        .mode-card .preview .red {
-            color: var(--red);
-        }
-
-        .mode-card .preview .dim {
-            opacity: 0.3;
-        }
-
-        /* Steps */
-        .steps {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .step {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 20px 24px;
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .step-num {
-            background: var(--accent);
-            color: #000;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.9em;
-            flex-shrink: 0;
-        }
-
-        .step-content h4 {
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        .step-content p {
-            color: var(--text2);
-            font-size: 0.9em;
-        }
-
-        /* Table */
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-        }
-
-        .info-table th,
-        .info-table td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .info-table th {
-            color: var(--accent);
-            font-weight: 500;
-            font-size: 0.9em;
-        }
-
-        .info-table td {
-            color: var(--text2);
-            font-size: 0.9em;
-        }
-
-        /* Gesture */
-        .gesture-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .gesture-item {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .gesture-item .action {
-            background: var(--bg);
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 0.85em;
-            font-weight: 500;
-            white-space: nowrap;
-            min-width: 80px;
-            text-align: center;
-        }
-
-        .gesture-item .result {
-            color: var(--text2);
-            font-size: 0.9em;
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text2);
-            font-size: 0.85em;
-        }
-
-        .footer a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        /* Tag */
-        .tag {
-            display: inline-block;
-            background: rgba(76, 175, 80, 0.15);
-            color: var(--accent2);
-            padding: 3px 10px;
-            border-radius: 6px;
-            font-size: 0.8em;
-            font-weight: 500;
-        }
-
-        /* Coffee */
-        .coffee-section {
-            text-align: center;
-            padding: 40px 0;
-        }
-
-        .coffee-icon {
-            font-size: 4em;
-            margin-bottom: 16px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .coffee-section h2 {
-            font-size: 1.5em;
-            margin-bottom: 12px;
-        }
-
-        .coffee-section p {
-            color: var(--text2);
-            font-size: 0.95em;
-            line-height: 1.6;
-        }
-
-        .coffee-btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 14px 32px;
-            background: linear-gradient(135deg, #FFDD00, #FF9100);
-            color: #000;
-            font-size: 1.1em;
-            font-weight: 700;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(255, 145, 0, 0.3);
-        }
-
-        .coffee-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(255, 145, 0, 0.5);
-        }
-    </style>
+    @media(max-width:768px){
+      nav .nav-links{display:none;}
+      .feat-grid{grid-template-columns:1fr;}
+      .community-grid{grid-template-columns:1fr;}
+    }
+  </style>
 </head>
-
 <body>
 
-    <!-- Hero -->
-    <div class="hero">
-        <div class="hero-content">
-            <h1>슬쩍 <span>(peekr)</span></h1>
-            <p class="tagline">실시간 주식·코인 가격을 슬쩍 확인하세요</p>
-            <p class="sub-tagline">K직장인들의 확실한 투자 파트너 !!!</p>
-            <span class="badge">Android App · 무료</span>
-        </div>
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="ticker-sym">BTC/USDT</span><span class="up">70,411 ▲2.9%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">ETH/USDT</span><span class="up">2,057 ▲3.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">삼성전자</span><span class="up">71,400 ▲1.1%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">KOSPI</span><span class="dn">2,584 ▼0.3%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">SOL/USDT</span><span class="up">142.8 ▲5.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">SK하이닉스</span><span class="up">138,500 ▲2.1%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">BTC/USDT</span><span class="up">70,411 ▲2.9%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">ETH/USDT</span><span class="up">2,057 ▲3.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">삼성전자</span><span class="up">71,400 ▲1.1%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">KOSPI</span><span class="dn">2,584 ▼0.3%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">SOL/USDT</span><span class="up">142.8 ▲5.2%</span></span>
+    <span class="ticker-item"><span class="ticker-sym">SK하이닉스</span><span class="up">138,500 ▲2.1%</span></span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="./index.html" class="nav-logo">슬쩍 · Peekr</a>
+  <div class="nav-links">
+    <a href="./ad.html">소개</a>
+    <a href="./guide.html">가이드</a>
+    <a href="./privacy.html">개인정보</a>
+    <a href="https://forms.gle/aGg5HdH7Y1Ut49Mr8" target="_blank" class="nav-cta">테스터 신청 →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="pulse"></span> Android · 무료 · 심사 중</div>
+  <h1>실시간 주식·코인을<br/><span class="blue">슬쩍</span> 확인하세요</h1>
+  <p class="hero-tagline">K직장인들의 확실한 투자 파트너</p>
+  <p class="hero-sub">화면보호기 · 오버레이 · 스텔스 모드<br/>아무도 모르게, 나만 본다.</p>
+  <div class="hero-btns">
+    <a href="#" class="btn-primary">▶ 플레이스토어 다운로드</a>
+    <a href="./ad.html" class="btn-ghost">📖 자세히 보기</a>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="features-section">
+  <div class="container">
+    <span class="section-label reveal">핵심 기능</span>
+    <h2 class="section-title reveal d1">6가지 이유</h2>
+    <div class="feat-grid reveal d2">
+      <div class="feat-card">
+        <span class="feat-num">01</span>
+        <span class="feat-icon">🖥️</span>
+        <h3>화면보호기</h3>
+        <p>충전 중 자동으로 활성화. 실시간 주식·코인 가격을 아름답게 표시합니다.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">02</span>
+        <span class="feat-icon">📌</span>
+        <h3>오버레이 위젯</h3>
+        <p>다른 앱 위에 항상 표시되는 플로팅 가격 바. 어떤 앱에서든 실시간 확인.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">03</span>
+        <span class="feat-icon">🕶️</span>
+        <h3>스텔스 모드</h3>
+        <p>숫자만 워터마크처럼. 옆 사람은 절대 모른다. 완벽한 위장근무.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">04</span>
+        <span class="feat-icon">⚡</span>
+        <h3>실시간 시세</h3>
+        <p>바이낸스 WebSocket 실시간. 네이버 금융 1분 갱신. 0.1초도 놓치지 않는다.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">05</span>
+        <span class="feat-icon">🔎</span>
+        <h3>종목 검색</h3>
+        <p>"삼성전자" 치면 005930 자동 변환. 코인도 주식도 한 곳에서.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-num">06</span>
+        <span class="feat-icon">🎨</span>
+        <h3>커스터마이징</h3>
+        <p>글꼴, 색상, 배경 사진, 위치까지. 내 취향대로 완벽하게.</p>
+      </div>
     </div>
+  </div>
+</div>
 
-    <!-- 주요 기능 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title"><span class="emoji">✨</span> 주요 기능</h2>
-            <p class="section-desc">슬쩍이 제공하는 핵심 기능들을 소개합니다</p>
-            <div class="features">
-                <div class="feature-card">
-                    <div class="icon">🖥️</div>
-                    <h3>화면보호기</h3>
-                    <p>충전 중 자동으로 활성화되어 실시간 주식·코인 가격을 아름다운 레이아웃으로 표시합니다.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">📌</div>
-                    <h3>오버레이 위젯</h3>
-                    <p>다른 앱 위에 항상 표시되는 플로팅 가격 바. 어떤 앱을 사용하면서도 실시간 가격을 확인하세요.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🕶️</div>
-                    <h3>스텔스 모드</h3>
-                    <p>숫자만 워터마크처럼 표시. 주변 사람들이 눈치채지 못하게 가격을 확인할 수 있습니다.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">📊</div>
-                    <h3>실시간 시세</h3>
-                    <p>네이버 금융 API로 국내 주식, Binance WebSocket으로 암호화폐 가격을 실시간으로 수신합니다.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🖼️</div>
-                    <h3>사진 배경</h3>
-                    <p>로컬 사진 폴더, 온라인 이미지 등 다양한 소스로 화면보호기 배경을 꾸밀 수 있습니다.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🎨</div>
-                    <h3>자유로운 커스터마이징</h3>
-                    <p>글꼴 크기, 색상, 투명도, 위치 등 세밀한 설정으로 나만의 화면을 만드세요.</p>
-                </div>
-            </div>
-        </div>
+<!-- COMMUNITY -->
+<div class="community-section">
+  <div class="container">
+    <span class="section-label reveal">커뮤니티</span>
+    <h2 class="section-title reveal d1" style="margin-bottom:8px;">함께 써요</h2>
+    <p class="reveal d2" style="color:var(--muted);margin-bottom:0;">테스터 신청, 새 기능 제안, 직장인 투자 이야기까지</p>
+    <div class="community-grid reveal d3">
+      <a href="https://open.kakao.com/o/g3FQiIki" target="_blank" class="community-card kakao">
+        <span class="comm-icon">💬</span>
+        <div class="comm-name">카카오 오픈채팅</div>
+        <p class="comm-desc">슬쩍 공식 커뮤니티.<br/>테스터 신청, 기능 제안, 피드백.</p>
+        <span class="comm-arrow">참여하기 →</span>
+      </a>
+      <a href="https://t.me/+4sopnsWSgJ82MTRl" target="_blank" class="community-card telegram">
+        <span class="comm-icon">✈️</span>
+        <div class="comm-name">텔레그램 채널</div>
+        <p class="comm-desc">업데이트 알림, 출시 소식.<br/>가장 먼저 새 버전을 받으세요.</p>
+        <span class="comm-arrow">구독하기 →</span>
+      </a>
     </div>
+  </div>
+</div>
 
-    <!-- 화면보호기 템플릿 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title"><span class="emoji">🖥️</span> 화면보호기 템플릿</h2>
-            <p class="section-desc">3가지 레이아웃 중 취향에 맞게 선택하세요</p>
-            <div class="features">
-                <div class="feature-card">
-                    <div class="icon">🎯</div>
-                    <h3>센터 모드</h3>
-                    <p>화면 중앙에 시계와 가격 정보를 집중 배치. 깔끔하고 심플한 디자인.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">📐</div>
-                    <h3>분할 모드</h3>
-                    <p>화면을 분할하여 시계, 날씨, 가격 정보를 각 영역에 배치. 정보량이 많을 때 추천.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🖼️</div>
-                    <h3>포토프레임 모드</h3>
-                    <p>사진 배경 위에 시계와 가격을 오버레이 표시. 디지털 액자처럼 활용 가능.</p>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- TESTER -->
+<div class="tester-section">
+  <h2 class="tester-title reveal">
+    먼저 써보고 싶다면?<br/>
+    <span>테스터로 신청하세요</span>
+  </h2>
+  <p class="tester-desc reveal d1">
+    구글 플레이 심사 완료 전, 먼저 설치해볼 수 있습니다.<br/>
+    이메일 주소만 있으면 OK. 무료입니다.
+  </p>
+  <a href="https://forms.gle/aGg5HdH7Y1Ut49Mr8" target="_blank" class="btn-tester reveal d2">
+    📧 테스터 신청하기
+  </a>
+  <p class="reveal d3" style="color:var(--muted);font-size:0.85em;margin-top:16px;">Google Forms로 연결됩니다</p>
+</div>
 
-    <!-- 오버레이 위젯 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title"><span class="emoji">📌</span> 오버레이 위젯</h2>
-            <p class="section-desc">다른 앱 위에 항상 떠 있는 실시간 가격 바</p>
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">슬쩍 · Peekr</span>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:20px;">실시간 코인·주식 화면보호기 & 오버레이</p>
+  <div class="footer-links">
+    <a href="./ad.html">소개</a>
+    <a href="./guide.html">가이드</a>
+    <a href="./privacy.html">개인정보 처리방침</a>
+    <a href="mailto:s2001352@gmail.com">📧 문의</a>
+  </div>
+  <p class="footer-copy">© 2026 peekr. All rights reserved.</p>
+</footer>
 
-            <div class="mode-grid">
-                <div class="mode-card">
-                    <h3>👁 일반 모드</h3>
-                    <div class="preview">
-                        삼전 <span class="green">72,500 ▲2.1%</span> · BTC <span class="red">$65,544 ▼0.8%</span>
-                    </div>
-                    <p style="color:var(--text2);font-size:0.85em;">이름 + 가격 + 등락률<br>반투명 검정 배경</p>
-                </div>
-                <div class="mode-card">
-                    <h3>🕶 스텔스 모드</h3>
-                    <div class="preview">
-                        <span class="dim">72500 65544 173500</span>
-                    </div>
-                    <p style="color:var(--text2);font-size:0.85em;">숫자만 워터마크 스타일<br>~20% 투명도</p>
-                </div>
-            </div>
-
-            <h3 style="margin-top:32px;margin-bottom:16px;">제스처 조작</h3>
-            <div class="gesture-list">
-                <div class="gesture-item">
-                    <span class="action">탭</span>
-                    <span class="result">반응 없음 — 실수로 터치해도 움직이지 않습니다</span>
-                </div>
-                <div class="gesture-item">
-                    <span class="action">길게 누르기</span>
-                    <span class="result">팝업 메뉴 표시 — 위치 이동 / 모드 전환 / 설정 / 닫기</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 지원 시세 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title"><span class="emoji">💰</span> 지원 시세</h2>
-            <p class="section-desc">암호화폐와 국내 주식을 동시에 확인할 수 있습니다</p>
-            <table class="info-table">
-                <tr>
-                    <th>종류</th>
-                    <th>데이터 소스</th>
-                    <th>갱신</th>
-                </tr>
-                <tr>
-                    <td>암호화폐 (BTC, ETH, SOL 등)</td>
-                    <td>Binance WebSocket API</td>
-                    <td>실시간</td>
-                </tr>
-                <tr>
-                    <td>코스피 / 코스닥 지수</td>
-                    <td>네이버 금융 API</td>
-                    <td>1분 간격</td>
-                </tr>
-                <tr>
-                    <td>국내 개별 주식 (삼성전자 등)</td>
-                    <td>네이버 금융 API</td>
-                    <td>1분 간격</td>
-                </tr>
-            </table>
-
-            <h3 style="margin-top:32px;margin-bottom:16px;">종목 추가 방법</h3>
-            <div class="steps">
-                <div class="step">
-                    <span class="step-num">1</span>
-                    <div class="step-content">
-                        <h4>암호화폐</h4>
-                        <p>Binance 티커를 직접 입력 (예: BTCUSDT, SOLUSDT)</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <span class="step-num">2</span>
-                    <div class="step-content">
-                        <h4>국내 주식</h4>
-                        <p>종목 이름으로 검색 (예: "삼성전자" → 자동으로 005930 변환)</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <span class="step-num">3</span>
-                    <div class="step-content">
-                        <h4>순서 변경</h4>
-                        <p>▲▼ 버튼으로 표시 순서를 자유롭게 변경</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 설정 옵션 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title"><span class="emoji">⚙️</span> 설정 옵션</h2>
-            <p class="section-desc">세밀한 커스터마이징이 가능합니다</p>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-                <div class="gesture-item"><span class="action">글꼴 크기</span><span class="result">슬라이더 조절</span></div>
-                <div class="gesture-item"><span class="action">정보 바</span><span class="result">상단 / 하단</span></div>
-                <div class="gesture-item"><span class="action">배경 색상</span><span class="result">컬러 피커</span></div>
-                <div class="gesture-item"><span class="action">글자 색상</span><span class="result">컬러 피커</span></div>
-                <div class="gesture-item"><span class="action">강조 색상</span><span class="result">컬러 피커</span></div>
-                <div class="gesture-item"><span class="action">초 표시</span><span class="result">ON / OFF</span></div>
-                <div class="gesture-item"><span class="action">달력</span><span class="result">ON / OFF</span></div>
-                <div class="gesture-item"><span class="action">날씨</span><span class="result">API Key + GPS</span></div>
-                <div class="gesture-item"><span class="action">사진 소스</span><span class="result">로컬 / 온라인</span></div>
-                <div class="gesture-item"><span class="action">사진 전환</span><span class="result">3초 / 10초 / 60초</span>
-                </div>
-                <div class="gesture-item"><span class="action">프리셋</span><span class="result">📱 폰 / 태블릿</span></div>
-                <div class="gesture-item"><span class="action">화면 방향</span><span class="result">자동 / 세로 / 가로</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 개인정보 -->
-    <div class="section">
-        <div class="container">
-            <h2 class="section-title"><span class="emoji">🔒</span> 개인정보 보호</h2>
-            <p class="section-desc">슬쩍은 사용자의 개인정보를 수집하지 않습니다</p>
-            <div class="features" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-                <div class="feature-card" style="text-align:center;">
-                    <div class="icon">🚫</div>
-                    <h3>회원가입 없음</h3>
-                </div>
-                <div class="feature-card" style="text-align:center;">
-                    <div class="icon">📱</div>
-                    <h3>기기 내부 저장만</h3>
-                </div>
-                <div class="feature-card" style="text-align:center;">
-                    <div class="icon">🔐</div>
-                    <h3>서버 전송 없음</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 후원 -->
-    <div class="section">
-        <div class="container">
-            <div class="coffee-section">
-                <div class="coffee-icon">☕</div>
-                <h2>개발자에게 커피 한 잔 사주기</h2>
-                <p>슬쩍이 유용하셨다면, 커피 한 잔으로 응원해 주세요!<br>
-                    여러분의 후원이 더 나은 업데이트의 원동력이 됩니다 ☕️</p>
-                <a href="https://qr.kakaopay.com/Ej8ZV7ZuB" target="_blank" class="coffee-btn">
-                    ☕ 카카오페이로 커피 사주기
-                </a>
-                <p style="font-size:0.75em;color:var(--text2);margin-top:12px;">
-                    카카오페이 QR로 간편하게 후원할 수 있습니다 🙏
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-        <p>슬쩍(peekr) · 실시간 코인·주식 화면보호기 & 오버레이</p>
-        <p style="margin-top:8px;"><a href="./privacy.html">개인정보 처리방침</a> · 📧 s2001352@gmail.com</p>
-        <p style="margin-top:12px;font-size:0.8em;">© 2026 peekr. All rights reserved.</p>
-    </div>
-
+<script>
+const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('active');});},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
 </body>
-
 </html>

@@ -1,80 +1,202 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>슬쩍(peekr) - 개인정보 처리방침</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-            color: #333;
-        }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>슬쩍 Peekr — 개인정보 처리방침</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --navy:#07090f;--navy2:#0d1117;--navy3:#111827;
+      --blue:#3b82f6;--blue-light:#60a5fa;
+      --mint:#34d399;--red:#f87171;--yellow:#fbbf24;
+      --text:#e2e8f0;--muted:#64748b;--border:#1e2d44;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Noto Sans KR',sans-serif;background:var(--navy);color:var(--text);overflow-x:hidden;line-height:1.8;}
 
-        h1 {
-            color: #1a1a1a;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 10px;
-        }
+    /* NAV */
+    nav{
+      padding:16px 32px;
+      display:flex;justify-content:space-between;align-items:center;
+      background:rgba(7,9,15,0.95);border-bottom:1px solid var(--border);
+      position:sticky;top:0;z-index:99;backdrop-filter:blur(16px);
+    }
+    .nav-logo{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--blue-light);text-decoration:none;}
+    .nav-back{color:var(--muted);text-decoration:none;font-size:13px;font-weight:700;transition:color 0.2s;}
+    .nav-back:hover{color:var(--text);}
 
-        h2 {
-            color: #2c2c2c;
-            margin-top: 30px;
-        }
+    /* HERO */
+    .hero{
+      padding:72px 32px 48px;
+      border-bottom:1px solid var(--border);
+      background:radial-gradient(ellipse at top center,rgba(59,130,246,0.06),transparent 60%);
+    }
+    .hero-inner{max-width:760px;margin:0 auto;}
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);
+      color:var(--mint);padding:6px 16px;border-radius:100px;
+      font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;
+      margin-bottom:24px;
+    }
+    .hero h1{font-size:clamp(1.8em,4vw,2.8em);font-weight:900;margin-bottom:12px;}
+    .hero-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);}
 
-        .date {
-            color: #666;
-            font-size: 0.9em;
-        }
-    </style>
+    /* CONTENT */
+    .content{max-width:760px;margin:0 auto;padding:60px 32px;}
+
+    .privacy-section{margin-bottom:56px;}
+    .privacy-section h2{
+      font-size:1.2em;font-weight:900;
+      margin-bottom:16px;
+      display:flex;align-items:center;gap:10px;
+      padding-bottom:12px;
+      border-bottom:1px solid var(--border);
+      color:var(--text);
+    }
+    .privacy-section h2 .num{
+      font-family:'JetBrains Mono',monospace;
+      font-size:11px;color:var(--blue-light);
+      background:rgba(59,130,246,0.1);
+      border:1px solid rgba(59,130,246,0.2);
+      padding:3px 8px;border-radius:6px;
+    }
+    .privacy-section p{color:var(--muted);font-size:0.95em;line-height:1.9;}
+    .privacy-section ul{
+      list-style:none;display:flex;flex-direction:column;gap:10px;
+      margin-top:12px;
+    }
+    .privacy-section ul li{
+      background:var(--navy2);border:1px solid var(--border);
+      border-radius:10px;padding:14px 18px;
+      color:var(--muted);font-size:0.9em;
+      display:flex;gap:10px;align-items:flex-start;
+    }
+    .privacy-section ul li::before{
+      content:'→';color:var(--blue-light);font-family:'JetBrains Mono',monospace;
+      font-size:12px;margin-top:2px;flex-shrink:0;
+    }
+    .privacy-section ul li strong{color:var(--text);}
+
+    /* CONTACT BOX */
+    .contact-box{
+      background:var(--navy2);border:1px solid var(--border);
+      border-radius:16px;padding:28px 24px;
+      display:flex;align-items:center;gap:16px;
+    }
+    .contact-icon{font-size:32px;flex-shrink:0;}
+    .contact-email{
+      font-family:'JetBrains Mono',monospace;
+      font-size:1em;font-weight:700;color:var(--blue-light);
+      text-decoration:none;
+    }
+    .contact-email:hover{text-decoration:underline;}
+
+    /* FOOTER */
+    footer{background:var(--navy2);border-top:1px solid var(--border);padding:32px;text-align:center;}
+    .footer-logo{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--blue-light);margin-bottom:12px;display:block;}
+    .footer-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;}
+    .footer-links a{color:var(--muted);text-decoration:none;font-size:13px;}
+    .footer-copy{font-size:12px;color:var(--border);}
+  </style>
 </head>
-
 <body>
-    <h1>슬쩍(peekr) 개인정보 처리방침</h1>
-    <p class="date">시행일: 2026년 3월 10일</p>
 
-    <h2>1. 수집하는 개인정보</h2>
+<!-- NAV -->
+<nav>
+  <a href="./index.html" class="nav-logo">슬쩍 · Peekr</a>
+  <a href="./index.html" class="nav-back">← 홈으로</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🔒 PRIVACY</div>
+    <h1>개인정보 처리방침</h1>
+    <p class="hero-date">시행일: 2026년 3월 10일</p>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <div class="privacy-section">
+    <h2><span class="num">01</span> 수집하는 개인정보</h2>
     <p>슬쩍(peekr)은 사용자의 개인정보를 수집하지 않습니다. 앱에서 사용하는 모든 설정 정보(코인 종목, 위젯 설정 등)는 사용자의 기기에만 저장되며, 외부 서버로 전송되지 않습니다.</p>
+  </div>
 
-    <h2>2. 위치 정보</h2>
+  <div class="privacy-section">
+    <h2><span class="num">02</span> 위치 정보</h2>
     <p>날씨 기능 사용 시 GPS 위치 정보를 요청할 수 있습니다. 이 정보는 OpenWeatherMap API에 날씨 조회 목적으로만 전달되며, 앱 자체에서 수집·저장하지 않습니다.</p>
+  </div>
 
-    <h2>3. 네트워크 사용</h2>
-    <p>앱은 다음 외부 서비스에 접속합니다:</p>
+  <div class="privacy-section">
+    <h2><span class="num">03</span> 네트워크 사용</h2>
+    <p>앱은 다음 외부 서비스에만 접속합니다:</p>
     <ul>
-        <li><strong>Binance WebSocket API</strong> — 실시간 암호화폐 가격 조회</li>
-        <li><strong>네이버 금융 API</strong> — 국내 주식/지수 가격 조회</li>
-        <li><strong>OpenWeatherMap API</strong> — 날씨 정보 조회</li>
+      <li><strong>Binance WebSocket API</strong> — 실시간 암호화폐 가격 조회</li>
+      <li><strong>네이버 금융 API</strong> — 국내 주식/지수 가격 조회</li>
+      <li><strong>OpenWeatherMap API</strong> — 날씨 정보 조회</li>
     </ul>
-    <p>이러한 접속은 가격 및 날씨 데이터를 표시하기 위한 목적으로만 이루어지며, 사용자 식별 정보는 전송되지 않습니다.</p>
+    <p style="margin-top:12px;">이러한 접속은 가격 및 날씨 데이터를 표시하기 위한 목적으로만 이루어지며, 사용자 식별 정보는 전송되지 않습니다.</p>
+  </div>
 
-    <h2>4. 권한 사용</h2>
+  <div class="privacy-section">
+    <h2><span class="num">04</span> 권한 사용</h2>
     <ul>
-        <li><strong>인터넷(INTERNET)</strong> — 가격 및 날씨 데이터 수신</li>
-        <li><strong>위치(ACCESS_FINE_LOCATION)</strong> — 날씨 조회용 GPS 좌표 (선택 사항)</li>
-        <li><strong>다른 앱 위에 표시(SYSTEM_ALERT_WINDOW)</strong> — 오버레이 위젯 기능 (선택 사항)</li>
-        <li><strong>포그라운드 서비스(FOREGROUND_SERVICE)</strong> — 오버레이 위젯 백그라운드 실행</li>
+      <li><strong>인터넷(INTERNET)</strong> — 가격 및 날씨 데이터 수신</li>
+      <li><strong>위치(ACCESS_FINE_LOCATION)</strong> — 날씨 조회용 GPS 좌표 (선택 사항)</li>
+      <li><strong>다른 앱 위에 표시(SYSTEM_ALERT_WINDOW)</strong> — 오버레이 위젯 기능 (선택 사항)</li>
+      <li><strong>포그라운드 서비스(FOREGROUND_SERVICE)</strong> — 오버레이 위젯 백그라운드 실행</li>
     </ul>
+  </div>
 
-    <h2>5. 데이터 저장</h2>
+  <div class="privacy-section">
+    <h2><span class="num">05</span> 데이터 저장</h2>
     <p>사용자의 설정(종목 리스트, 글꼴 크기, 색상 등)은 Android DataStore를 통해 기기 로컬에만 저장됩니다. 앱 삭제 시 모든 데이터가 함께 삭제됩니다.</p>
+  </div>
 
-    <h2>6. 제3자 제공</h2>
+  <div class="privacy-section">
+    <h2><span class="num">06</span> 제3자 제공</h2>
     <p>슬쩍(peekr)은 사용자의 어떠한 정보도 제3자에게 제공하지 않습니다.</p>
+  </div>
 
-    <h2>7. 아동 개인정보</h2>
+  <div class="privacy-section">
+    <h2><span class="num">07</span> 아동 개인정보</h2>
     <p>슬쩍(peekr)은 13세 미만 아동의 개인정보를 의도적으로 수집하지 않습니다.</p>
+  </div>
 
-    <h2>8. 문의</h2>
-    <p>개인정보 처리방침에 대한 문의사항이 있으시면 아래 이메일로 연락해 주세요.</p>
-    <p>📧 <strong>s2001352@gmail.com</strong></p>
+  <div class="privacy-section">
+    <h2><span class="num">08</span> 문의</h2>
+    <p style="margin-bottom:16px;">개인정보 처리방침에 대한 문의사항이 있으시면 아래 이메일로 연락해 주세요.</p>
+    <div class="contact-box">
+      <span class="contact-icon">📧</span>
+      <div>
+        <div style="font-size:0.85em;color:var(--muted);margin-bottom:4px;">개발자 이메일</div>
+        <a href="mailto:s2001352@gmail.com" class="contact-email">s2001352@gmail.com</a>
+      </div>
+    </div>
+  </div>
 
-    <h2>9. 변경 사항</h2>
+  <div class="privacy-section">
+    <h2><span class="num">09</span> 변경 사항</h2>
     <p>본 개인정보 처리방침은 변경될 수 있으며, 변경 시 앱 업데이트를 통해 안내합니다.</p>
-</body>
+  </div>
 
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">슬쩍 · Peekr</span>
+  <div class="footer-links">
+    <a href="./index.html">홈</a>
+    <a href="./ad.html">소개</a>
+    <a href="./guide.html">가이드</a>
+    <a href="mailto:s2001352@gmail.com">문의</a>
+  </div>
+  <p class="footer-copy">© 2026 peekr. All rights reserved.</p>
+</footer>
+
+</body>
 </html>
